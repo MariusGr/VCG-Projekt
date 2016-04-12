@@ -1,12 +1,16 @@
 # Raytracer
 
-Zerstörung
-
 Contains
 - Main Class
 - Render Window
+
+Mitte Test
+
 - Log utils
 - Obj Importer Libs (API@ http://www.interactivemesh.org/models/jfx3dimporter.html)
 - Vec2/3/4
 
-2.test Unten!
+<<<<<<< HEAD
+=======
+Test
+>>>>>>> be3e69b6367eff21620d04f17a52d781183f793a
