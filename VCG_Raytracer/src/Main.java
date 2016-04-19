@@ -26,6 +26,10 @@
 import ui.Window;
 import raytracer.Raytracer;
 import utils.Log;
+import utils.RgbColor;
+import utils.Vec2;
+
+import java.awt.image.BufferedImage;
 
 // Main application class. This is the routine called by the JVM to run the program.
 public class Main {
@@ -38,6 +42,7 @@ public class Main {
         long tStart = System.currentTimeMillis();
 
         Window renderWindow = new Window(IMAGE_WIDTH, IMAGE_HEIGHT);
+
 
         draw(renderWindow);
        Log.error(Main.class, "Fehler Test");

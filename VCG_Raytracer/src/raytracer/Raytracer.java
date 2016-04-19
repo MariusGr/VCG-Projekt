@@ -34,7 +34,12 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
-        mRenderWindow.setPixel(mBufferedImage, RgbColor.BLACK, new Vec2(0,0));
+
+        for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
+            for (int i = 0; i < mBufferedImage.getWidth(); i++) {
+                mRenderWindow.setPixel(mBufferedImage, new RgbColor((float) i / mBufferedImage.getWidth(), (float) j / mBufferedImage.getHeight(), (float) 0.7), new Vec2(i, j));
+            }
+        }
         IO.saveImageToPng(mBufferedImage, "raytracing.png");
     }
 }
