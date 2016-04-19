@@ -45,7 +45,6 @@ public class Main {
 
 
         draw(renderWindow);
-       Log.error(Main.class, "Fehler Test");
 
         renderWindow.setTimeToLabel(String.valueOf(stopTime(tStart)));
     }
