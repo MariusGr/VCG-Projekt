@@ -15,12 +15,15 @@ public class Intersection {
 
 
     public Ray calculateReflecionRay() {
+        return null;
     }
 
     public Ray calculateRefractionRay() {
+        return null;
     }
 
     public Boolean isOutOfDistance() {
+        return null;
     }
 }
 
