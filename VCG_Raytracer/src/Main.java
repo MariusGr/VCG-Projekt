@@ -36,6 +36,7 @@ public class Main {
 
     static int IMAGE_WIDTH = 800;
     static int IMAGE_HEIGHT = 600;
+    private int maxRecursions;
 
     // Initial method. This is where the show begins.
     public static void main(String[] args){
@@ -51,6 +52,25 @@ public class Main {
 
     private static void draw(Window renderWindow){
         raytraceScene(renderWindow);
+    }
+
+    private void setupScene()
+    {
+
+    }
+
+    private void setupLights()
+    {
+
+    }
+    private void setupCameras()
+    {
+
+    }
+
+    private void setupCornellBox()
+    {
+
     }
 
     private static void raytraceScene(Window renderWindow){
