@@ -25,6 +25,7 @@
 
 import ui.Window;
 import raytracer.Raytracer;
+import utils.Log;
 
 // Main application class. This is the routine called by the JVM to run the program.
 public class Main {
@@ -39,6 +40,7 @@ public class Main {
         Window renderWindow = new Window(IMAGE_WIDTH, IMAGE_HEIGHT);
 
         draw(renderWindow);
+       Log.error(Main.class, "Fehler Test");
 
         renderWindow.setTimeToLabel(String.valueOf(stopTime(tStart)));
     }
