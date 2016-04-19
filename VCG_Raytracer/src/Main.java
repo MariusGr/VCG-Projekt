@@ -14,12 +14,12 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- <<< YOUR TEAM NAME >>>
+ TecMegz
 
-     Master of Documentation:
-     Master of Structure:
-     Master of Performance:
-     Master of Theory:
+     Master of Documentation: Christopher
+     Master of Structure: Till
+     Master of Performance: Marius
+     Master of Theory: Jannis
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
