@@ -8,5 +8,13 @@ public class Ray {
     private Vec3 startPoint;
     private Vec3 endPoint;
     private Vec3 direction;
-    private Float distance;
+    private float distance;
+
+    public Ray(Vec3 _s, Vec3 _dir, float _dis) {
+        this.startPoint = _s;
+        this.direction = _dir;
+        this.distance = _dis;
+    }
+
+
 }
