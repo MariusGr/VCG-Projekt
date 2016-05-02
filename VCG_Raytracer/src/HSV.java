@@ -1,6 +1,3 @@
-/**
- * Created by PraktikumCG on 02.05.2016.
- */
 public class HSV {
 
     /**
@@ -12,15 +9,16 @@ public class HSV {
      * Ported from the excellent java algorithm by Eugene Vishnevsky at:
      * http://www.cs.rit.edu/~ncs/color/t_convert.html
      */
-    function hsvToRgb(h, s, v) {
-        var r, g, b;
-        var i;
-        var f, p, q, t;
+    public static float[] hsvToRgb(float _h, float _s, float _v) {
+        float r, g, b;
+        int i;
+        float f, p, q, t;
 
         // Make sure our arguments stay in-range
-        h = Math.max(0, Math.min(360, h));
-        s = Math.max(0, Math.min(100, s));
-        v = Math.max(0, Math.min(100, v));
+        float h = Math.max(0, Math.min(360, _h));
+        float s = Math.max(0, Math.min(100, _s));
+        float v = Math.max(0, Math.min(100, _v));
+
 
         // We accept saturation and value arguments from 0 to 100 because that's
         // how Photoshop represents those values. Internally, however, the
@@ -29,18 +27,16 @@ public class HSV {
         s /= 100;
         v /= 100;
 
-        if(s == 0) {
+        if (s == 0) {
             // Achromatic (grey)
             r = g = b = v;
-            return [
-            Math.round(r * 255),
-                    Math.round(g * 255),
-                    Math.round(b * 255)
-            ];
+
+            float[] out = {r, g,(b)};
+            return out;
         }
 
         h /= 60; // sector 0 to 5
-        i = Math.floor(h);
+        i = (int) Math.floor(h);
         f = h - i; // factorial part of h
         p = v * (1 - s);
         q = v * (1 - s * f);
@@ -83,10 +79,7 @@ public class HSV {
                 b = q;
         }
 
-        return [
-        Math.round(r * 255),
-                Math.round(g * 255),
-                Math.round(b * 255)
-        ];
+        float[] out = {r, g,(b)};
+        return out;
     }
 }

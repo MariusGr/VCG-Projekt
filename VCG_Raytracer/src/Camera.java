@@ -79,4 +79,8 @@ public class Camera extends SceneObject{
     public Vec3 getPosition() {
         return this.cameraPosition;
     }
+
+    public float getFocalLength() {
+        return this.focalLength;
+    }
 }

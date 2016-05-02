@@ -11,6 +11,12 @@ public class Vec3 {
         this.z = z;
     }
 
+    public Vec3(Vec3 _v){
+        this.x = _v.x;
+        this.y = _v.y;
+        this.z = _v.z;
+    }
+
     public Vec3(){
         this.x = 0;
         this.y = 0;
@@ -56,6 +62,10 @@ public class Vec3 {
                 this.z * inputVec.x - inputVec.z * this.x,
                 this.x * inputVec.y - inputVec.x * this.y
         );
+    }
+
+    public double angle(Vec3 inputVec) {
+        return Math.acos(this.scalar(inputVec)/(this.length()*inputVec.length()));
     }
 
     @Override
