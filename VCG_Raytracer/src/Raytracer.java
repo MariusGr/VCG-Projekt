@@ -14,8 +14,6 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package raytracer;
-
 import ui.Window;
 import utils.*;
 
@@ -34,10 +32,16 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
+        Camera c = new Camera(new Vec3(0 ,0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
+        Vec3 start = c.getPosition();
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
-                mRenderWindow.setPixel(mBufferedImage, new RgbColor((float) i / mBufferedImage.getWidth(), (float) j / mBufferedImage.getHeight(), (float) 0.7), new Vec2(i, j));
+                Vec3 dest = c.calculateDestination(i, j);
+                Ray r = new Ray(start, dest.normalize(), 1.0f);
+                Vec3 eP = r.getEndpoint();
+
+                mRenderWindow.setPixel(mBufferedImage, new RgbColor(eP.x, eP.y, eP.z), new Vec2(i, j));
             }
         }
         IO.saveImageToPng(mBufferedImage, "raytracing.png");

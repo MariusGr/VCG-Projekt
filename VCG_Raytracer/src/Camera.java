@@ -10,24 +10,24 @@ public class Camera extends SceneObject{
     private Vec3 lookAt;
     private Vec3 upVector;
     private float focalLength; //Brennweite
-    private float viewAngle;
+    private float alpha;
     private float ratio = (float) Main.IMAGE_WIDTH/(float) Main.IMAGE_HEIGHT;
     private float viewPlaneH; // Höhe Viewplane
     private float viewPlaneW; // Breite Viewplane
     private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur Viewplane
 
-    public Camera(Vec3 _pos, Vec3 _locA, Vec3 _up, float _localL, float _v) {
+    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _a) {
         this.cameraPosition = _pos; // Kamera Position im Globalen Koordinatensystem
-        this.lookAt = _locA.normalize(); //Lookat Vektor
+        this.lookAt = _lokA.normalize(); //Lookat Vektor
         this.upVector = _up;  //upVektor
-        this.focalLength = _localL;
-        this.viewAngle = _v; //VielAnlge Kamera -> Öffnungswinkel der Kamera
+        this.focalLength = _focalL;
+        this.alpha = _a; //VielAnlge Kamera -> Öffnungswinkel der Kamera
 
-        this.viewPlaneH = (float) (2*Math.tan(viewAngle/2)); // Berechnung Höhe ViewPlane
+        this.viewPlaneH = (float) (2*Math.tan(alpha/2)); // Berechnung Höhe ViewPlane
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
 
-        focalLength = (viewPlaneH/2)/((float) Math.tan(viewAngle/2));
-        vVector = lookAt.multScalar(focalLength);
+        this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
+        this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
     }
 
     public void getPixelColor(Vec2 _p) {
@@ -36,10 +36,27 @@ public class Camera extends SceneObject{
         //Vec3
     }
 
-    public Vec3 calculateDestination() {
-        return null;
+    private Vec3 viewPlaneCenter() {
+        return cameraPosition.add(vVector);
     }
 
+    public Vec3 calculateDestination(int _x, int _y) {
+        Vec2 pN = pNorm(new Vec2(_x, _y));
+
+        float xN = pN.x;
+        float yN = pN.y;
+        Vec3 vC = viewPlaneCenter();
+
+        Vec3 dest = new Vec3(vC.x+(xN*viewPlaneW/2), vC.y+(yN*viewPlaneH/2), vC.z);
+
+        return dest;
+    }
+
+    /**
+     * Normiert einen zweidimensionalen Vektor auf die Viewplane mit einem Wertebereich zwisachen -1 und +1 für x bzw y.
+     * @param _v2 Position in px auf der attsächlichen Bildfläche
+     * @return normierte Position auf der Viewplane
+     */
     private Vec2 pNorm(Vec2 _v2) {
         float x = _v2.x;
         float y = _v2.y;
@@ -49,7 +66,17 @@ public class Camera extends SceneObject{
         return new Vec2(newX, newY);
     }
 
+    /**
+     * Hilfsfunktiojn für pNorm() mit der bekannten Formel aus der Vorlesung
+     * @param _f x bzw. y Koordinate
+     * @param _max Maximum der jeweiligen Koordinate, sprich Breite bzw. Höhe
+     * @return normirter Koordinatenwert
+     */
     private float pNormCalculate(float _f, float _max) {
         return (2*((_f+0.5f)/_max)-1);
+    }
+
+    public Vec3 getPosition() {
+        return this.cameraPosition;
     }
 }
