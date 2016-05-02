@@ -17,6 +17,7 @@
 import ui.Window;
 import utils.*;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Raytracer {
@@ -41,9 +42,14 @@ public class Raytracer {
                 Ray r = new Ray(start, dest.normalize(), 1.0f);
                 Vec3 eP = r.getEndpoint();
 
-                mRenderWindow.setPixel(mBufferedImage, new RgbColor(eP.x, eP.y, eP.z), new Vec2(i, j));
+                Color col = Color.getHSBColor(eP.x, eP.y, eP.z);
+                float red = (float) col.getRed()/255.0f;
+                float blue = (float)col.getBlue()/255.0f;
+                float green = (float)col.getGreen()/255.0f;
+
+                mRenderWindow.setPixel(mBufferedImage, new RgbColor(red, green, blue), new Vec2(i, j));
             }
         }
-        IO.saveImageToPng(mBufferedImage, "raytracing.png");
+        IO.saveImageToPng(mBufferedImage, "raytracing"+System.currentTimeMillis()+".png");
     }
 }
