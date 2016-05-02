@@ -9,25 +9,25 @@ public class Camera extends SceneObject{
     private Vec3 cameraPosition;
     private Vec3 lookAt;
     private Vec3 upVector;
-    private float localLength;
+    private float focalLength; //Brennweite
     private float viewAngle;
     private float ratio = (float) Main.IMAGE_WIDTH/(float) Main.IMAGE_HEIGHT;
-    private float viewPlaneH;
-    private float viewPlaneW;
-    private Vec3 vVector;
+    private float viewPlaneH; // Höhe Viewplane
+    private float viewPlaneW; // Breite Viewplane
+    private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur Viewplane
 
     public Camera(Vec3 _pos, Vec3 _locA, Vec3 _up, float _localL, float _v) {
-        this.cameraPosition = _pos;
-        this.lookAt = _locA.normalize();
-        this.upVector = _up;
-        this.localLength = _localL;
-        this.viewAngle = _v;
+        this.cameraPosition = _pos; // Kamera Position im Globalen Koordinatensystem
+        this.lookAt = _locA.normalize(); //Lookat Vektor
+        this.upVector = _up;  //upVektor
+        this.focalLength = _localL;
+        this.viewAngle = _v; //VielAnlge Kamera -> Öffnungswinkel der Kamera
 
-        this.viewPlaneH = (float) (2*Math.tan(viewAngle/2));
+        this.viewPlaneH = (float) (2*Math.tan(viewAngle/2)); // Berechnung Höhe ViewPlane
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
 
-        localLength = (viewPlaneH/2)/((float) Math.tan(viewAngle/2));
-        vVector = lookAt.multScalar(localLength);
+        focalLength = (viewPlaneH/2)/((float) Math.tan(viewAngle/2));
+        vVector = lookAt.multScalar(focalLength);
     }
 
     public void getPixelColor(Vec2 _p) {
