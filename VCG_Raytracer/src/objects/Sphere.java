@@ -1,3 +1,7 @@
+package objects;
+
+import material.Material;
+import raytracer.Ray;
 import utils.Vec3;
 
 /**

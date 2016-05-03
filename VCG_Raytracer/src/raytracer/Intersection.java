@@ -1,4 +1,7 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
+package raytracer;
+
+import objects.Shape;
+import raytracer.Ray;
 import utils.Vec3;
 /**
  * Created by PraktikumCG on 19.04.2016.

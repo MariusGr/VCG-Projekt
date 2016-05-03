@@ -1,3 +1,6 @@
+package objects;
+
+import material.Material;
 import utils.Vec3;
 
 /**

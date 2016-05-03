@@ -1,4 +1,4 @@
-// ************************************************************ //
+package scene;// ************************************************************ //
 //                      Hochschule Duesseldorf                  //
 //                                                              //
 //                     Vertiefung Computergrafik                //
@@ -23,9 +23,10 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+import raytracer.Raytracer;
 import ui.Window;
 
-// Main application class. This is the routine called by the JVM to run the program.
+// scene.Main application class. This is the routine called by the JVM to run the program.
 public class Main {
 
     static int IMAGE_WIDTH = 800;

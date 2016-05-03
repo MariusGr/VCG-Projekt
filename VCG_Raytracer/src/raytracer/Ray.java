@@ -1,3 +1,5 @@
+package raytracer;
+
 import utils.Vec3;
 
 /**

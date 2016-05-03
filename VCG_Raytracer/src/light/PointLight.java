@@ -1,3 +1,5 @@
+package light;
+
 import utils.RgbColor;
 import utils.Vec3;
 

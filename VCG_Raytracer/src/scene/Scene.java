@@ -1,3 +1,8 @@
+package scene;
+
+import light.Light;
+import objects.Shape;
+
 /**
  * Created by PraktikumCG on 19.04.2016.
  */

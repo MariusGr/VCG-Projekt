@@ -1,3 +1,6 @@
+package light;
+
+import objects.SceneObject;
 import utils.RgbColor;
 import utils.Vec3;
 

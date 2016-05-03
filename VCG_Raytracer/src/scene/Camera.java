@@ -1,20 +1,21 @@
-/**
+package scene; /**
  * Created by PraktikumCG on 19.04.2016.
  */
 
+import objects.SceneObject;
 import utils.Vec2;
 import utils.Vec3;
 
-public class Camera extends SceneObject{
+public class Camera extends SceneObject {
     private Vec3 cameraPosition;
     private Vec3 lookAt;
     private Vec3 upVector;
     private float focalLength; //Brennweite
     private float alpha;
     private float ratio = (float) Main.IMAGE_WIDTH/(float) Main.IMAGE_HEIGHT;
-    private float viewPlaneH; // Höhe Viewplane
-    private float viewPlaneW; // Breite Viewplane
-    private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur Viewplane
+    private float viewPlaneH; // Höhe scene.Viewplane
+    private float viewPlaneW; // Breite scene.Viewplane
+    private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur scene.Viewplane
 
     public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _alpha) {
         this.cameraPosition = _pos; // Kamera Position im Globalen Koordinatensystem
@@ -53,9 +54,9 @@ public class Camera extends SceneObject{
     }
 
     /**
-     * Normiert einen zweidimensionalen Vektor auf die Viewplane mit einem Wertebereich zwisachen -1 und +1 für x bzw y.
+     * Normiert einen zweidimensionalen Vektor auf die scene.Viewplane mit einem Wertebereich zwisachen -1 und +1 für x bzw y.
      * @param _v2 Position in px auf der attsächlichen Bildfläche
-     * @return normierte Position auf der Viewplane
+     * @return normierte Position auf der scene.Viewplane
      */
     private Vec2 pNorm(Vec2 _v2) {
         float x = _v2.x;

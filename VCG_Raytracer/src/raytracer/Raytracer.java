@@ -1,3 +1,7 @@
+package raytracer;
+
+import objects.Sphere;
+import scene.Camera;
 import ui.Window;
 import utils.*;
 
@@ -49,11 +53,11 @@ public class Raytracer {
 /**
  *
 // Init vor den Schleifen
- Camera myCam = new Camera(new Vec3(0 ,0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
+ scene.Camera myCam = new scene.Camera(new Vec3(0 ,0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
  Vec3 start = myCam.getPosition();
 
  Vec3 dest = myCam.calculateDestination(mBufferedImage.getWidth(), mBufferedImage.getHeight());
- Ray r = new Ray(start, dest);
+ raytracer.Ray r = new raytracer.Ray(start, dest);
  Vec3 rEndP = r.getEndpoint();
  float rDist = r.getDistance();
  float vDiffMax = rDist-myCam.getFocalLength();
@@ -63,7 +67,7 @@ public class Raytracer {
 
 
  dest = myCam.calculateDestination(i, j);
- r = new Ray(start, dest);
+ r = new raytracer.Ray(start, dest);
  rEndP = r.getEndpoint();
  rDist = r.getDistance();
  float vDiff = rDist-myCam.getFocalLength();
@@ -80,7 +84,7 @@ public class Raytracer {
 
  //Log.print(this, "--   "+rP.x+", "+rP.y+", "+rP.z+", AA:"+angle);
 
- float[] rgb = HSV.hsvToRgb((float) angle, vDiff*100, 100f);
+ float[] rgb = utils.HSV.hsvToRgb((float) angle, vDiff*100, 100f);
  float red = rgb[0];
  float blue = rgb[1];
  float green = rgb[2];

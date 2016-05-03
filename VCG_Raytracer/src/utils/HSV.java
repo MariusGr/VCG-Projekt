@@ -1,7 +1,9 @@
+package utils;
+
 public class HSV {
 
     /**
-     * HSV to RGB color conversion
+     * utils.HSV to RGB color conversion
      *
      * H runs from 0 to 360 degrees
      * S and V run from 0 to 100
