@@ -6,5 +6,9 @@ import utils.Vec3;
 
 
 public class SceneObject {
-    private Vec3 position;
+    protected Vec3 position;
+
+    public SceneObject(Vec3 _position) {
+        this.position = _position;
+    }
 }
