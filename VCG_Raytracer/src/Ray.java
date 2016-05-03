@@ -38,4 +38,12 @@ public class Ray {
     public float getDistance() {
         return this.distance;
     }
+
+    public Vec3 getStartPoint() {
+        return startPoint;
+    }
+
+    public Vec3 getDirection() {
+        return direction;
+    }
 }

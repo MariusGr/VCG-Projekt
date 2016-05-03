@@ -1,4 +1,3 @@
-import org.w3c.dom.css.RGBColor;
 import utils.RgbColor;
 
 /**

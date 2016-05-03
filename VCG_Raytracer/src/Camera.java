@@ -16,12 +16,12 @@ public class Camera extends SceneObject{
     private float viewPlaneW; // Breite Viewplane
     private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur Viewplane
 
-    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _a) {
+    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _alpha) {
         this.cameraPosition = _pos; // Kamera Position im Globalen Koordinatensystem
         this.lookAt = _lokA.normalize(); //Lookat Vektor
         this.upVector = _up;  //upVektor
         this.focalLength = _focalL;
-        this.alpha = _a; //VielAnlge Kamera -> Öffnungswinkel der Kamera
+        this.alpha = _alpha; //ViewAngle Kamera -> Öffnungswinkel der Kamera
 
         this.viewPlaneH = (float) (2*Math.tan(alpha/2)); // Berechnung Höhe ViewPlane
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
