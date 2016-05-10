@@ -44,7 +44,7 @@ public class Camera extends SceneObject {
         Vec2 pN = pNorm(new Vec2(_x, _y));
 
         float xN = pN.x;
-        float yN = pN.y;
+        float yN = -pN.y; // *-1, wegen umgedrehten Koordinatensystem auf Bildschirm
         Vec3 vC = viewPlaneCenter();
 
         Vec3 dest = new Vec3(vC.x+(xN*viewPlaneW/2), vC.y+(yN*viewPlaneH/2), vC.z);

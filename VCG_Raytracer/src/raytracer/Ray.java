@@ -20,10 +20,6 @@ public class Ray {
         this.endPoint = direction.multScalar(distance).add(startPoint);
     }
 
-    public Vec3 getEndpoint() {
-        return endPoint;
-    }
-
     public Ray(Vec3 _s, Vec3 _endP) {
         this.startPoint = _s;
         this.endPoint = _endP;
@@ -31,6 +27,10 @@ public class Ray {
         this.direction = endPoint.sub(this.startPoint);
         this.distance = this.direction.length();
         this.direction.normalize();
+    }
+
+    public Vec3 getEndpoint() {
+        return endPoint;
     }
 
     public Vec3 rayVector() {
