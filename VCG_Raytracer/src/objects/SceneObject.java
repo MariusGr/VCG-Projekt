@@ -13,4 +13,6 @@ public class SceneObject {
     public SceneObject(Vec3 _position) {
         this.position = _position;
     }
+
+    public Vec3 getPosition(){return this.position;}
 }

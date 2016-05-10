@@ -7,7 +7,6 @@ import utils.Vec2;
 import utils.Vec3;
 
 public class Camera extends SceneObject {
-    private Vec3 cameraPosition;
     private Vec3 lookAt;
     private Vec3 upVector;
     private float focalLength; //Brennweite
@@ -18,7 +17,7 @@ public class Camera extends SceneObject {
     private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur scene.Viewplane
 
     public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _alpha) {
-        this.cameraPosition = _pos; // Kamera Position im Globalen Koordinatensystem
+        super(_pos); // Kamera Position im Globalen Koordinatensystem
         this.lookAt = _lokA.normalize(); //Lookat Vektor
         this.upVector = _up;  //upVektor
         this.focalLength = _focalL;
@@ -38,7 +37,7 @@ public class Camera extends SceneObject {
     }
 
     private Vec3 viewPlaneCenter() {
-        return cameraPosition.add(vVector);
+        return super.position.add(vVector);
     }
 
     public Vec3 calculateDestination(int _x, int _y) {
@@ -78,7 +77,7 @@ public class Camera extends SceneObject {
     }
 
     public Vec3 getPosition() {
-        return this.cameraPosition;
+        return super.position;
     }
 
     public float getFocalLength() {
