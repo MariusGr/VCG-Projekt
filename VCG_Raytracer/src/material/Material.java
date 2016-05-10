@@ -15,7 +15,7 @@ public class Material {
         this.materialCoff = _materialCoff;
     }
 
-    public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV) {
+    public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV, Vec3 dir) {
         return null;
     }
 }

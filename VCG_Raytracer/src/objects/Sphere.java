@@ -31,13 +31,13 @@ public class Sphere extends Shape {
         float d = b*b-4*c;
 
         Vec3 intersectP = dir.multScalar(t0);           // Schnittpunkt von gesendeten Strahl mit der Kugel
-        Vec3 normal = intersectP.sub(super.position);   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
+        Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
 
         Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts
-        Vec3 lVector = lPos.sub(intersectP);            // Vektor von Schnittpunkt zu Lichtquelle
+        Vec3 lVector = lPos.sub(intersectP).normalize();            // Vektor von Schnittpunkt zu Lichtquelle
 
-        RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector);
+        RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
 
         float[] out = new float[4];
         out[0] = d;

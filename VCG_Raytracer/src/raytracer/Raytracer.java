@@ -2,7 +2,7 @@ package raytracer;
 
 import light.Light;
 import light.PointLight;
-import material.Lambert;
+import material.Phong;
 import objects.Sphere;
 import scene.Camera;
 import ui.Window;
@@ -28,8 +28,8 @@ public class Raytracer {
         Camera myCam = new Camera(new Vec3(0 ,0, 1.5f), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
         Vec3 start = myCam.getPosition();
         Vec3 sphereStart = new Vec3(0, 0, 0);
-        Sphere sphere1 = new Sphere(1, sphereStart, new Lambert(new RgbColor(1,0,0), 1f));
-        createLight(0, new RgbColor(1,1,1), new Vec3(0, 2.2f, -5));
+        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 7));
+        createLight(0, new RgbColor(1,1,1), new Vec3(5, 0, 0));
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
