@@ -45,7 +45,7 @@ public class Raytracer {
                 mRenderWindow.setPixel(mBufferedImage, new RgbColor(red, green, blue), new Vec2(i, j));
             }
         }
-        IO.saveImageToPng(mBufferedImage, "raytracing"+System.currentTimeMillis()+".png");
+        IO.saveImageToPng(mBufferedImage, "RenderBilder\\raytracing"+System.currentTimeMillis()+".png");
     }
 }
 
