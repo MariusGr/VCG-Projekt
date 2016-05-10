@@ -4,7 +4,6 @@ import light.Light;
 import material.Material;
 import raytracer.Ray;
 import raytracer.Raytracer;
-import utils.Log;
 import utils.RgbColor;
 import utils.Vec3;
 
@@ -26,8 +25,8 @@ public class Sphere extends Shape {
         float c = start.x*start.x+start.y*start.y+start.z*start.z-this.radius*this.radius;
 
         float t0 = (float) ((   -b - Math.sqrt(b*b-4*c)   )/2);
-        float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
-        t0=t1;
+        //float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
+        //t0=t1;
         float d = b*b-4*c;
 
         Vec3 intersectP = dir.multScalar(t0);           // Schnittpunkt von gesendeten Strahl mit der Kugel
@@ -45,9 +44,9 @@ public class Sphere extends Shape {
         out[2] = RgbAtIntersect.green();
         out[3] = RgbAtIntersect.blue();
 
-        if(d >= 0) {
+        /*if(d >= 0) {
             Log.print(this, d+":  "+intersectP);
-        }
+        }*/
 
         return out;
     }
