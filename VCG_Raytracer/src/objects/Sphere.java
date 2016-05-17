@@ -43,6 +43,9 @@ public class Sphere extends Shape {
         out[1] = RgbAtIntersect.red();
         out[2] = RgbAtIntersect.green();
         out[3] = RgbAtIntersect.blue();
+        out[4] = intersectP.x;
+        out[5] = intersectP.y;
+        out[6] = intersectP.z;
 
         /*if(d >= 0) {
             Log.print(this, d+":  "+intersectP);

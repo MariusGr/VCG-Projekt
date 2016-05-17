@@ -2,7 +2,10 @@ package raytracer;
 
 import light.Light;
 import light.PointLight;
+import material.Lambert;
 import material.Phong;
+import objects.Plane;
+import objects.Shape;
 import objects.Sphere;
 import scene.Camera;
 import ui.Window;
@@ -27,26 +30,42 @@ public class Raytracer {
 
         Camera myCam = new Camera(new Vec3(0 ,0, 2), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart = new Vec3(1, 0.5f, 0);
+        Vec3 sphereStart = new Vec3(0, 0, 0);
         Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 20));
-        createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, 5));
+
+        Plane plane1 = new Plane(new Vec3(0,0,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
+        Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
+
+        Shape[] shapeArray = new Shape[3];
+        shapeArray[0] = plane1;
+        shapeArray[1] = plane2;
+        shapeArray[2] = sphere1;
+
+        createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, -5));
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
                 Vec3 dest = myCam.calculateDestination(i, j);
                 Ray r = new Ray(start, dest.sub(start), 200);
+                float distance;     // Distanz von Kamera zum Schnittpunkt
 
-                float[] materialOut = sphere1.intersect(r);
-                float d = materialOut[0];
+                for (int g) { //unfertig!!!!
+                    float[] materialOut = plane1.intersect(r);
+                    float d = materialOut[0];
+                    float red = materialOut[1];
+                    float blue = materialOut[2];
+                    float green = materialOut[3];
+                    float iX = materialOut[4];
+                    float iY = materialOut[5];
+                    float iZ = materialOut[6];
 
-                float red = materialOut[1];
-                float blue = materialOut[2];
-                float green = materialOut[3];
+                    distance = new Vec3(iX, iY, iZ).sub(start).length();
 
-                if (d < 0) {
-                    red = 0;
-                    blue = 0;
-                    green = 0;
+                    if (d < 0) {
+                        red = 0;
+                        blue = 0;
+                        green = 0;
+                    }
                 }
 
                 mRenderWindow.setPixel(mBufferedImage, new RgbColor(red, green, blue), new Vec2(i, j));
