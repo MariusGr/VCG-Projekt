@@ -26,15 +26,16 @@ public class Sphere extends Shape {
         float c = start.x*start.x+start.y*start.y+start.z*start.z-this.radius*this.radius;
 
         float t0 = (float) ((   -b - Math.sqrt(b*b-4*c)   )/2);
-        //float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
-        //t0=t1;
+        float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
+        if (t1<t0 && t1>=0){t0=t1;}
         float d = b*b-4*c;
 
 
 
 
-        Vec3 intersectP = dir.multScalar(t0).add(super.position);           // Schnittpunkt von gesendeten Strahl mit der Kugel
-        Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
+        Vec3 intersectP = dir.multScalar(t0);
+        intersectP.add(_ray.getStartPoint());        // Schnittpunkt von gesendeten Strahl mit der Kugel
+        Vec3 normal = intersectP.sub(super.position);   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
 
 
         float distance = intersectP.sub(_ray.getStartPoint()).length();

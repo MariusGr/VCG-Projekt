@@ -37,12 +37,12 @@ public class Raytracer {
         Sphere sphere2 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0,1,0), 1f, 50));
 
         Plane plane1 = new Plane(new Vec3(0,2,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
-        Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
+        Plane plane2 = new Plane(new Vec3(0,0,1), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, -1));
 
-        Shape[] shapeArray = new Shape[2];
+        Shape[] shapeArray = new Shape[1];
         shapeArray[0] = sphere2;
-        shapeArray[1] = sphere1;
-        //shapeArray[2] = plane1;
+       // shapeArray[1] = sphere1;
+        //shapeArray[2] = plane2;
 
         createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, -5));
 
@@ -62,6 +62,7 @@ public class Raytracer {
                         float iX = materialOut[4];
                         float iY = materialOut[5];
                         float iZ = materialOut[6];
+
                         distance = materialOut[7];
 
 
