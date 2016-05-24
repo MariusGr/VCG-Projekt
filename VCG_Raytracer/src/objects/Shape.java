@@ -1,12 +1,13 @@
 package objects;
 
 import material.Material;
+import raytracer.Ray;
 import utils.Vec3;
 
 /**
  * Created by PraktikumCG on 19.04.2016.
  */
-public class Shape extends SceneObject {
+public abstract class Shape extends SceneObject {
     protected Material material;
 
     public Shape(Vec3 _position, Material _material) {
@@ -14,8 +15,5 @@ public class Shape extends SceneObject {
         material = _material;
     }
 
-    public void intersect()
-        {
-
-        }
+    public abstract float[] intersect(Ray _ray);
 }

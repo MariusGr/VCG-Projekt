@@ -18,6 +18,7 @@ public class Sphere extends Shape {
         this.radius = _radius;
     }
 
+    @Override
     public float[]  intersect(Ray _ray) {
         Vec3 start = _ray.getStartPoint().sub(super.position);
         Vec3 dir = _ray.getDirection();
@@ -29,8 +30,14 @@ public class Sphere extends Shape {
         //t0=t1;
         float d = b*b-4*c;
 
+
+
+
         Vec3 intersectP = dir.multScalar(t0).add(super.position);           // Schnittpunkt von gesendeten Strahl mit der Kugel
         Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
+
+
+        float distance = intersectP.sub(_ray.getStartPoint()).length();
 
         Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts
@@ -38,7 +45,7 @@ public class Sphere extends Shape {
 
         RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
 
-        float[] out = new float[4];
+        float[] out = new float[8];
         out[0] = d;
         out[1] = RgbAtIntersect.red();
         out[2] = RgbAtIntersect.green();
@@ -46,6 +53,7 @@ public class Sphere extends Shape {
         out[4] = intersectP.x;
         out[5] = intersectP.y;
         out[6] = intersectP.z;
+        out[7] = distance;
 
         /*if(d >= 0) {
             Log.print(this, d+":  "+intersectP);

@@ -1,5 +1,6 @@
 package raytracer;
 
+import jdk.nashorn.internal.runtime.Debug;
 import light.Light;
 import light.PointLight;
 import material.Lambert;
@@ -31,15 +32,17 @@ public class Raytracer {
         Camera myCam = new Camera(new Vec3(0 ,0, 2), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
         Vec3 start = myCam.getPosition();
         Vec3 sphereStart = new Vec3(0, 0, 0);
-        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 20));
+        Vec3 sphereStart1 = new Vec3(0, -1, 0);
+        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 50));
+        Sphere sphere2 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0,1,0), 1f, 50));
 
-        Plane plane1 = new Plane(new Vec3(0,0,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
+        Plane plane1 = new Plane(new Vec3(0,2,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
         Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
 
-        Shape[] shapeArray = new Shape[3];
-        shapeArray[0] = plane1;
-        shapeArray[1] = plane2;
-        shapeArray[2] = sphere1;
+        Shape[] shapeArray = new Shape[2];
+        shapeArray[0] = sphere2;
+        shapeArray[1] = sphere1;
+        //shapeArray[2] = plane1;
 
         createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, -5));
 
@@ -48,25 +51,47 @@ public class Raytracer {
                 Vec3 dest = myCam.calculateDestination(i, j);
                 Ray r = new Ray(start, dest.sub(start), 200);
                 float distance;     // Distanz von Kamera zum Schnittpunkt
+                float red = 0;
+                float blue = 0;
+                float green = 0;
+                float saveDistance = 0;
 
-                for (int g) { //unfertig!!!!
-                    float[] materialOut = plane1.intersect(r);
-                    float d = materialOut[0];
-                    float red = materialOut[1];
-                    float blue = materialOut[2];
-                    float green = materialOut[3];
-                    float iX = materialOut[4];
-                    float iY = materialOut[5];
-                    float iZ = materialOut[6];
+                for (int g = 0; g < shapeArray.length; g++) {
+                        float[] materialOut = shapeArray[g].intersect(r);//Intersection von Shape [X]
+                        float d = materialOut[0];
+                        float iX = materialOut[4];
+                        float iY = materialOut[5];
+                        float iZ = materialOut[6];
+                        distance = materialOut[7];
 
-                    distance = new Vec3(iX, iY, iZ).sub(start).length();
+
+                        if(distance>=saveDistance)
+                        {
+                            red = materialOut[1];
+                            blue = materialOut[2];
+                            green = materialOut[3];
+                            saveDistance = distance;
+                        }
+
+
+
+
+
+
+
+                    if (distance>=saveDistance) {
+                        Log.error(this, "test: " + distance);
+
+                    }
+
+                    //distance = new Vec3(iX, iY, iZ).sub(start).length();
 
                     if (d < 0) {
-                        red = 0;
-                        blue = 0;
-                        green = 0;
+                        red = 0.4f;
+                        blue = 0.6f;
+                        green = 0.9f;
                     }
-                }
+               }
 
                 mRenderWindow.setPixel(mBufferedImage, new RgbColor(red, green, blue), new Vec2(i, j));
             }
