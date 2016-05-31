@@ -30,7 +30,7 @@ public class Raytracer {
 
         Camera myCam = new Camera(new Vec3(0 ,0, 2), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart = new Vec3(0, 0, 0);
+        Vec3 sphereStart = new Vec3(0, 4, 0);
         Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 20));
 
         Plane plane1 = new Plane(new Vec3(0,0,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
@@ -41,7 +41,7 @@ public class Raytracer {
         shapeArray[1] = plane2;
         shapeArray[2] = sphere1;
 
-        createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, -5));
+        createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, -4));
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
@@ -49,8 +49,8 @@ public class Raytracer {
                 Ray r = new Ray(start, dest.sub(start), 200);
                 float distance;     // Distanz von Kamera zum Schnittpunkt
 
-                for (int g) { //unfertig!!!!
-                    float[] materialOut = plane1.intersect(r);
+                //for (int g) { //unfertig!!!!
+                    float[] materialOut = sphere1.intersect(r);
                     float d = materialOut[0];
                     float red = materialOut[1];
                     float blue = materialOut[2];
@@ -66,7 +66,7 @@ public class Raytracer {
                         blue = 0;
                         green = 0;
                     }
-                }
+                //}
 
                 mRenderWindow.setPixel(mBufferedImage, new RgbColor(red, green, blue), new Vec2(i, j));
             }
