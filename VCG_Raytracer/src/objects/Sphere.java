@@ -2,6 +2,7 @@ package objects;
 
 import light.Light;
 import material.Material;
+import raytracer.Intersection;
 import raytracer.Ray;
 import raytracer.Raytracer;
 import utils.Matrix4;
@@ -13,16 +14,18 @@ import utils.Vec3;
  */
 public class Sphere extends Shape {
     private float radius;
+    private Matrix4 translateM;
+    private Matrix4 invM;
 
     public Sphere(float _radius, Vec3 _pos, Material _material) {
         super(_pos, _material);
         this.radius = _radius;
+        this.translateM = new Matrix4().translate(super.position);
+        this.invM = translateM.invert();
     }
 
-    public float[]  intersect(Ray _ray) {
+    public Intersection  intersect(Ray _ray) {
         Vec3 start = _ray.getStartPoint();
-        Matrix4 translateM = new Matrix4().translate(super.position);
-        Matrix4 invM = translateM.invert();
 
         start = invM.multVec3(start, false);
 
@@ -33,14 +36,7 @@ public class Sphere extends Shape {
         float t0 = (float) ((   -b - Math.sqrt(b*b-4*c)   )/2);
         float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
 
-        float[] out = new float[7];
-        out[0] = -1;    // Wenn der Block (s. unten) nicht ausgeführt wird, weil die Kugel hinter der Kamera liegt, wird dieser Wert dazu führen, dass sie nicht gezeichznet wird
-        out[1] = 0;
-        out[2] = 0;
-        out[3] = 0;
-        out[4] = 0;
-        out[5] = 0;
-        out[6] = 0;
+        Intersection inters = new Intersection();
 
         if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen
             if(t1 < t0 && t1 >= 0) t0 = t1; // Welches t ist näher an der Kamera?
@@ -57,16 +53,14 @@ public class Sphere extends Shape {
 
             RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
 
-            out[0] = d;
-            out[1] = RgbAtIntersect.red()+0.2f;
-            out[2] = RgbAtIntersect.green()+0.2f;
-            out[3] = RgbAtIntersect.blue()+0.2f;
-            out[4] = intersectP.x;
-            out[5] = intersectP.y;
-            out[6] = intersectP.z;
+            inters.shape = this;
+            inters.hit = (d >= 0);
+            inters.interSectionPoint = intersectP;
+            inters.normal = normal;
+            inters.rgb = RgbAtIntersect;
 
         }
 
-        return out;
+        return inters;
     }
 }
