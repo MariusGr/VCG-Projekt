@@ -16,18 +16,18 @@ public class Camera extends SceneObject {
     private float viewPlaneW; // Breite scene.Viewplane
     private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur scene.Viewplane
 
-    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _focalL, float _alpha) {
+    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _alpha) {
         super(_pos); // Kamera Position im Globalen Koordinatensystem
         this.lookAt = _lokA.normalize(); //Lookat Vektor
         this.upVector = _up;  //upVektor
-        this.focalLength = _focalL;
         this.alpha = _alpha; //ViewAngle Kamera -> Öffnungswinkel der Kamera
 
-        this.viewPlaneH = (float) (2*Math.tan(alpha/2)); // Berechnung Höhe ViewPlane
+        this.viewPlaneH = (float) (2f*Math.tan(alpha/2f)); // Berechnung Höhe ViewPlane
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
 
-        this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
-        this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
+        //this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
+        this.focalLength = (float) ((viewPlaneW/2f)/Math.tan(alpha/2f));
+                this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
     }
 
     public void getPixelColor(Vec2 _p) {
