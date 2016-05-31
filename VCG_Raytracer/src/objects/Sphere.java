@@ -27,24 +27,26 @@ public class Sphere extends Shape {
     public Intersection  intersect(Ray _ray) {
         Vec3 start = _ray.getStartPoint();
 
-        start = invM.multVec3(start, false);
+        start = invM.multVec3(start, true);
 
         Vec3 dir = _ray.getDirection();                             // Richtung kann dieselbe bleiben
         float b = 2*(start.x*dir.x+start.y*dir.y+start.z*dir.z);
         float c = start.x*start.x+start.y*start.y+start.z*start.z-this.radius*this.radius;
 
-        float t0 = (float) ((   -b - Math.sqrt(b*b-4*c)   )/2);
-        float t1 = (float) ((   -b + Math.sqrt(b*b-4*c)   )/2);
-
         Intersection inters = new Intersection();
+        float d = b * b - 4 * c;
+
+        if(d < 0) return inters;
+
+        float t0 = (float) ((   -b - Math.sqrt(d)   )/2f);
+        float t1 = (float) ((   -b + Math.sqrt(d)   )/2f);
 
         if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen
             if(t1 < t0 && t1 >= 0) t0 = t1; // Welches t ist näher an der Kamera?
 
-            float d = b * b - 4 * c;
-
+            Matrix4 translateMStart = new Matrix4().translate(start);
             Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
-            intersectP = translateM.multVec3(intersectP, false);
+            intersectP = translateM.multVec3(intersectP, true);
             Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
 
             Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle

@@ -28,9 +28,9 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
-        Camera myCam = new Camera(new Vec3(0 ,0, 2), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90.0f);
+        Camera myCam = new Camera(new Vec3(0 ,0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1.0f, 90);
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart = new Vec3(2, 0, 0);
+        Vec3 sphereStart = new Vec3(0, 6, 0);
         Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 20));
 
         Plane plane1 = new Plane(new Vec3(0,0,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
