@@ -8,26 +8,31 @@ import utils.Vec3;
 
 public class Camera extends SceneObject {
     private Vec3 lookAt;
-    private Vec3 upVector;
+    private Vec3 userUpVector;
     private float focalLength; //Brennweite
     private float alpha;
     private float ratio = (float) Main.IMAGE_WIDTH/(float) Main.IMAGE_HEIGHT;
     private float viewPlaneH; // Höhe scene.Viewplane
     private float viewPlaneW; // Breite scene.Viewplane
     private Vec3 vVector; //V-Vektor -> Entfernung Kamera zur scene.Viewplane
+    private Vec3 uVector;
+    private Vec3 sVector;
 
-    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _alpha) {
+    public Camera(Vec3 _pos, Vec3 _lokA, Vec3 _up, float _alpha, Vec3 _centerOI) {
         super(_pos); // Kamera Position im Globalen Koordinatensystem
         this.lookAt = _lokA.normalize(); //Lookat Vektor
-        this.upVector = _up;  //upVektor
+        this.userUpVector = _up;  //UserupVektor
         this.alpha = _alpha; //ViewAngle Kamera -> Öffnungswinkel der Kamera
+        this.vVector = _centerOI.sub(_pos);
+        this.sVector = vVector.cross(_up).normalize();
+        this.uVector = sVector.cross(vVector).normalize(); //uVektor
 
         this.viewPlaneH = (float) (2f*Math.tan(alpha/2f)); // Berechnung Höhe ViewPlane
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
 
         //this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
         this.focalLength = (float) ((viewPlaneW/2f)/Math.tan(alpha/2f));
-                this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
+        //this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
     }
 
     public void getPixelColor(Vec2 _p) {
@@ -42,12 +47,15 @@ public class Camera extends SceneObject {
 
     public Vec3 calculateDestination(int _x, int _y) {
         Vec2 pN = pNorm(new Vec2(_x, _y));
+        Vec3 horizontal = sVector.multScalar(pN.x*viewPlaneW);
+        Vec3 vertical = uVector.multScalar(-pN.y*viewPlaneH);
 
         float xN = pN.x;
         float yN = -pN.y; // *-1, wegen umgedrehten Koordinatensystem auf Bildschirm
         Vec3 vC = viewPlaneCenter();
 
-        Vec3 dest = new Vec3(vC.x+(xN*viewPlaneW/2), vC.y+(yN*viewPlaneH/2), vC.z);
+        //Vec3 dest = new Vec3(vC.x+(xN*viewPlaneW/2), vC.y+(yN*viewPlaneH/2), vC.z);
+        Vec3 dest = viewPlaneCenter().add(horizontal.add(vertical));
 
         return dest;
     }

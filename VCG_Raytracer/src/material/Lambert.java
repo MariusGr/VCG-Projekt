@@ -13,6 +13,6 @@ public class Lambert extends Material {
     }
 
     public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV) {
-        return _iP.multRGB(super.color.multScalar(materialCoff).multScalar( _normal.normalize().scalar(_lightV.normalize())));
+        return _iP.multRGB(super.color.multScalar(materialCoff).multScalar( _normal.scalar(_lightV)));
     }
 }

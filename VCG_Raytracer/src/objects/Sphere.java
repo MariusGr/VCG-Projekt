@@ -30,16 +30,16 @@ public class Sphere extends Shape {
         start = invM.multVec3(start, true);
 
         Vec3 dir = _ray.getDirection();                             // Richtung kann dieselbe bleiben
-        float b = 2*(start.x*dir.x+start.y*dir.y+start.z*dir.z);
+        float b = 2f*(start.x*dir.x+start.y*dir.y+start.z*dir.z);
         float c = start.x*start.x+start.y*start.y+start.z*start.z-this.radius*this.radius;
 
         Intersection inters = new Intersection();
-        float d = b * b - 4 * c;
+        float d = b * b - 4f * c;
 
         if(d < 0) return inters;
 
-        float t0 = (float) ((   -b - Math.sqrt(d)   )/2f);
-        float t1 = (float) ((   -b + Math.sqrt(d)   )/2f);
+        float t0 =  ((   -b - (float) Math.sqrt(d)   )/2f);
+        float t1 =  ((   -b +(float)  Math.sqrt(d)   )/2f);
 
         if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen
             if(t1 < t0 && t1 >= 0) t0 = t1; // Welches t ist näher an der Kamera?

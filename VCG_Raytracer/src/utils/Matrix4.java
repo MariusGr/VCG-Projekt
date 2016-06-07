@@ -42,7 +42,7 @@ public class Matrix4 {
 		return out;
 	}
 
-	public Matrix4 scale( double s ){
+	public Matrix4 scale( float s ){
 		Matrix4 out = new Matrix4(mBaseMatrix);
 
 		out.setValueAt( 0, 0, s );
@@ -91,11 +91,11 @@ public class Matrix4 {
 		return new Matrix4( mBaseMatrix.inverse() );
 	}
 
-	public void setValueAt(int row, int col, double value){
+	public void setValueAt(int row, int col, float value){
 		mBaseMatrix.set( row, col, value );
 	}
 
-	public double getValueAt(int row, int col){
+	public float getValueAt(int row, int col){
 		return mBaseMatrix.get(row, col);
 	}
 
@@ -133,19 +133,19 @@ public class Matrix4 {
 
 	private static class Matrix implements Cloneable, java.io.Serializable {
 
-		private double[][] A;
+		private float[][] A;
 		private int m, n;
 
 		public Matrix (int m, int n) {
 			this.m = m;
 			this.n = n;
-			A = new double[m][n];
+			A = new float[m][n];
 		}
 
-		public Matrix (int m, int n, double s) {
+		public Matrix (int m, int n, float s) {
 			this.m = m;
 			this.n = n;
-			A = new double[m][n];
+			A = new float[m][n];
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					A[i][j] = s;
@@ -153,7 +153,7 @@ public class Matrix4 {
 			}
 		}
 
-		public Matrix (double[][] A) {
+		public Matrix (float[][] A) {
 			m = A.length;
 			n = A[0].length;
 			for (int i = 0; i < m; i++) {
@@ -164,19 +164,19 @@ public class Matrix4 {
 			this.A = A;
 		}
 
-		public Matrix (double[][] A, int m, int n) {
+		public Matrix (float[][] A, int m, int n) {
 			this.A = A;
 			this.m = m;
 			this.n = n;
 		}
 
-		public Matrix (double vals[], int m) {
+		public Matrix (float vals[], int m) {
 			this.m = m;
 			n = (m != 0 ? vals.length/m : 0);
 			if (m*n != vals.length) {
 				throw new IllegalArgumentException("Array length must be a multiple of m.");
 			}
-			A = new double[m][n];
+			A = new float[m][n];
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					A[i][j] = vals[i+j*m];
@@ -184,11 +184,11 @@ public class Matrix4 {
 			}
 		}
 
-		public static Matrix constructWithCopy(double[][] A) {
+		public static Matrix constructWithCopy(float[][] A) {
 			int m = A.length;
 			int n = A[0].length;
 			Matrix X = new Matrix(m,n);
-			double[][] C = X.getArray();
+			float[][] C = X.getArray();
 			for (int i = 0; i < m; i++) {
 				if (A[i].length != n) {
 					throw new IllegalArgumentException
@@ -203,7 +203,7 @@ public class Matrix4 {
 
 		public Matrix copy () {
 			Matrix X = new Matrix(m,n);
-			double[][] C = X.getArray();
+			float[][] C = X.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					C[i][j] = A[i][j];
@@ -216,12 +216,12 @@ public class Matrix4 {
 			return this.copy();
 		}
 
-		public double[][] getArray () {
+		public float[][] getArray () {
 			return A;
 		}
 
-		public double[][] getArrayCopy () {
-			double[][] C = new double[m][n];
+		public float[][] getArrayCopy () {
+			float[][] C = new float[m][n];
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					C[i][j] = A[i][j];
@@ -230,8 +230,8 @@ public class Matrix4 {
 			return C;
 		}
 
-		public double[] getColumnPackedCopy () {
-			double[] vals = new double[m*n];
+		public float[] getColumnPackedCopy () {
+			float[] vals = new float[m*n];
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					vals[i+j*m] = A[i][j];
@@ -240,8 +240,8 @@ public class Matrix4 {
 			return vals;
 		}
 
-		public double[] getRowPackedCopy () {
-			double[] vals = new double[m*n];
+		public float[] getRowPackedCopy () {
+			float[] vals = new float[m*n];
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					vals[i*n+j] = A[i][j];
@@ -258,13 +258,13 @@ public class Matrix4 {
 			return n;
 		}
 
-		public double get (int i, int j) {
+		public float get (int i, int j) {
 			return A[i][j];
 		}
 
 		public Matrix getMatrix (int i0, int i1, int j0, int j1) {
 			Matrix X = new Matrix(i1-i0+1,j1-j0+1);
-			double[][] B = X.getArray();
+			float[][] B = X.getArray();
 			try {
 				for (int i = i0; i <= i1; i++) {
 					for (int j = j0; j <= j1; j++) {
@@ -279,7 +279,7 @@ public class Matrix4 {
 
 		public Matrix getMatrix (int[] r, int[] c) {
 			Matrix X = new Matrix(r.length,c.length);
-			double[][] B = X.getArray();
+			float[][] B = X.getArray();
 			try {
 				for (int i = 0; i < r.length; i++) {
 					for (int j = 0; j < c.length; j++) {
@@ -294,7 +294,7 @@ public class Matrix4 {
 
 		public Matrix getMatrix (int i0, int i1, int[] c) {
 			Matrix X = new Matrix(i1-i0+1,c.length);
-			double[][] B = X.getArray();
+			float[][] B = X.getArray();
 			try {
 				for (int i = i0; i <= i1; i++) {
 					for (int j = 0; j < c.length; j++) {
@@ -309,7 +309,7 @@ public class Matrix4 {
 
 		public Matrix getMatrix (int[] r, int j0, int j1) {
 			Matrix X = new Matrix(r.length,j1-j0+1);
-			double[][] B = X.getArray();
+			float[][] B = X.getArray();
 			try {
 				for (int i = 0; i < r.length; i++) {
 					for (int j = j0; j <= j1; j++) {
@@ -322,7 +322,7 @@ public class Matrix4 {
 			return X;
 		}
 
-		public void set (int i, int j, double s) {
+		public void set (int i, int j, float s) {
 			A[i][j] = s;
 		}
 
@@ -376,7 +376,7 @@ public class Matrix4 {
 
 		public Matrix transpose () {
 			Matrix X = new Matrix(n,m);
-			double[][] C = X.getArray();
+			float[][] C = X.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					C[j][i] = A[i][j];
@@ -385,8 +385,8 @@ public class Matrix4 {
 			return X;
 		}
 
-		public double trace () {
-			double t = 0;
+		public float trace () {
+			float t = 0;
 			for (int i = 0; i < Math.min(m,n); i++) {
 				t += A[i][i];
 			}
@@ -395,10 +395,10 @@ public class Matrix4 {
 
 		public static Matrix random (int m, int n) {
 			Matrix A = new Matrix(m,n);
-			double[][] X = A.getArray();
+			float[][] X = A.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
-					X[i][j] = Math.random();
+					X[i][j] = (float) Math.random();
 				}
 			}
 			return A;
@@ -406,10 +406,10 @@ public class Matrix4 {
 
 		public static Matrix identity (int m, int n) {
 			Matrix A = new Matrix(m,n);
-			double[][] X = A.getArray();
+			float[][] X = A.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
-					X[i][j] = (i == j ? 1.0 : 0.0);
+					X[i][j] = (i == j ? 1.0f : 0.0f);
 				}
 			}
 			return A;
@@ -434,7 +434,7 @@ public class Matrix4 {
 			return solve(identity(m,m));
 		}
 
-		public double det () {
+		public float det () {
 			return new LUDecomposition(this).det();
 		}
 
@@ -443,23 +443,23 @@ public class Matrix4 {
 
 	private static class Maths {
 
-		public static double hypot(double a, double b) {
-			double r;
+		public static float hypot(float a, float b) {
+			float r;
 			if (Math.abs(a) > Math.abs(b)) {
 				r = b/a;
-				r = Math.abs(a)*Math.sqrt(1+r*r);
+				r = Math.abs(a)*(float) Math.sqrt(1+r*r);
 			} else if (b != 0) {
 				r = a/b;
-				r = Math.abs(b)*Math.sqrt(1+r*r);
+				r = Math.abs(b)*(float) Math.sqrt(1+r*r);
 			} else {
-				r = 0.0;
+				r = 0.0f;
 			}
 			return r;
 		}
 	}
 	public static class LUDecomposition implements java.io.Serializable {
 
-		private double[][] LU;
+		private float[][] LU;
 		private int m, n, pivsign;
 		private int[] piv;
 
@@ -475,8 +475,8 @@ public class Matrix4 {
 				piv[i] = i;
 			}
 			pivsign = 1;
-			double[] LUrowi;
-			double[] LUcolj = new double[m];
+			float[] LUrowi;
+			float[] LUcolj = new float[m];
 
 			// Outer loop.
 
@@ -496,7 +496,7 @@ public class Matrix4 {
 					// Most of the time is spent in the following dot product.
 
 					int kmax = Math.min(i,j);
-					double s = 0.0;
+					float s = 0.0f;
 					for (int k = 0; k < kmax; k++) {
 						s += LUrowi[k]*LUcolj[k];
 					}
@@ -514,7 +514,7 @@ public class Matrix4 {
 				}
 				if (p != j) {
 					for (int k = 0; k < n; k++) {
-						double t = LU[p][k]; LU[p][k] = LU[j][k]; LU[j][k] = t;
+						float t = LU[p][k]; LU[p][k] = LU[j][k]; LU[j][k] = t;
 					}
 					int k = piv[p]; piv[p] = piv[j]; piv[j] = k;
 					pivsign = -pivsign;
@@ -540,15 +540,15 @@ public class Matrix4 {
 
 		public Matrix getL () {
 			Matrix X = new Matrix(m,n);
-			double[][] L = X.getArray();
+			float[][] L = X.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					if (i > j) {
 						L[i][j] = LU[i][j];
 					} else if (i == j) {
-						L[i][j] = 1.0;
+						L[i][j] = 1.0f;
 					} else {
-						L[i][j] = 0.0;
+						L[i][j] = 0.0f;
 					}
 				}
 			}
@@ -557,13 +557,13 @@ public class Matrix4 {
 
 		public Matrix getU () {
 			Matrix X = new Matrix(n,n);
-			double[][] U = X.getArray();
+			float[][] U = X.getArray();
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
 					if (i <= j) {
 						U[i][j] = LU[i][j];
 					} else {
-						U[i][j] = 0.0;
+						U[i][j] = 0.0f;
 					}
 				}
 			}
@@ -578,19 +578,19 @@ public class Matrix4 {
 			return p;
 		}
 
-		public double[] getDoublePivot () {
-			double[] vals = new double[m];
+		public float[] getfloatPivot () {
+			float[] vals = new float[m];
 			for (int i = 0; i < m; i++) {
-				vals[i] = (double) piv[i];
+				vals[i] = (float) piv[i];
 			}
 			return vals;
 		}
 
-		public double det () {
+		public float det () {
 			if (m != n) {
 				throw new IllegalArgumentException("Matrix must be square.");
 			}
-			double d = (double) pivsign;
+			float d = (float) pivsign;
 			for (int j = 0; j < n; j++) {
 				d *= LU[j][j];
 			}
@@ -608,7 +608,7 @@ public class Matrix4 {
 			// Copy right hand side with pivoting
 			int nx = B.getColumnDimension();
 			Matrix Xmat = B.getMatrix(piv,0,nx-1);
-			double[][] X = Xmat.getArray();
+			float[][] X = Xmat.getArray();
 
 			// Solve L*Y = B(piv,:)
 			for (int k = 0; k < n; k++) {
@@ -636,21 +636,21 @@ public class Matrix4 {
 
 	public static class QRDecomposition implements java.io.Serializable {
 
-		private double[][] QR;
+		private float[][] QR;
 		private int m, n;
-		private double[] Rdiag;
+		private float[] Rdiag;
 
 		public QRDecomposition (Matrix A) {
 			// Initialize.
 			QR = A.getArrayCopy();
 			m = A.getRowDimension();
 			n = A.getColumnDimension();
-			Rdiag = new double[n];
+			Rdiag = new float[n];
 
 			// Main loop.
 			for (int k = 0; k < n; k++) {
 				// Compute 2-norm of k-th column without under/overflow.
-				double nrm = 0;
+				float nrm = 0;
 				for (int i = k; i < m; i++) {
 					nrm = Maths.hypot(nrm,QR[i][k]);
 				}
@@ -667,7 +667,7 @@ public class Matrix4 {
 
 					// Apply transformation to remaining columns.
 					for (int j = k+1; j < n; j++) {
-						double s = 0.0;
+						float s = 0.0f;
 						for (int i = k; i < m; i++) {
 							s += QR[i][k]*QR[i][j];
 						}
@@ -691,13 +691,13 @@ public class Matrix4 {
 
 		public Matrix getH () {
 			Matrix X = new Matrix(m,n);
-			double[][] H = X.getArray();
+			float[][] H = X.getArray();
 			for (int i = 0; i < m; i++) {
 				for (int j = 0; j < n; j++) {
 					if (i >= j) {
 						H[i][j] = QR[i][j];
 					} else {
-						H[i][j] = 0.0;
+						H[i][j] = 0.0f;
 					}
 				}
 			}
@@ -706,7 +706,7 @@ public class Matrix4 {
 
 		public Matrix getR () {
 			Matrix X = new Matrix(n,n);
-			double[][] R = X.getArray();
+			float[][] R = X.getArray();
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
 					if (i < j) {
@@ -714,7 +714,7 @@ public class Matrix4 {
 					} else if (i == j) {
 						R[i][j] = Rdiag[i];
 					} else {
-						R[i][j] = 0.0;
+						R[i][j] = 0.0f;
 					}
 				}
 			}
@@ -723,15 +723,15 @@ public class Matrix4 {
 
 		public Matrix getQ () {
 			Matrix X = new Matrix(m,n);
-			double[][] Q = X.getArray();
+			float[][] Q = X.getArray();
 			for (int k = n-1; k >= 0; k--) {
 				for (int i = 0; i < m; i++) {
-					Q[i][k] = 0.0;
+					Q[i][k] = 0.0f;
 				}
-				Q[k][k] = 1.0;
+				Q[k][k] = 1.0f;
 				for (int j = k; j < n; j++) {
 					if (QR[k][k] != 0) {
-						double s = 0.0;
+						float s = 0.0f;
 						for (int i = k; i < m; i++) {
 							s += QR[i][k]*Q[i][j];
 						}
@@ -755,12 +755,12 @@ public class Matrix4 {
 
 			// Copy right hand side
 			int nx = B.getColumnDimension();
-			double[][] X = B.getArrayCopy();
+			float[][] X = B.getArrayCopy();
 
 			// Compute Y = transpose(Q)*B
 			for (int k = 0; k < n; k++) {
 				for (int j = 0; j < nx; j++) {
-					double s = 0.0;
+					float s = 0.0f;
 					for (int i = k; i < m; i++) {
 						s += QR[i][k]*X[i][j];
 					}

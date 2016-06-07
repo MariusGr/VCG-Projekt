@@ -15,12 +15,19 @@ public class Phong extends Material {
     }
 
     public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV, Vec3 _dir) {
-        Lambert lam = new Lambert(this.color, 0.8f);
+        _dir = _dir.multScalar(-1).normalize();
+        Lambert lam = new Lambert(this.color, 1f);
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
-        float nlScalar =_normal.scalar(_lightV);
+        float nlScalar =_normal.scalar(_lightV); //Normalenvektor mal Lichtvektor
         Vec3 reflectionV = _normal.multScalar(nlScalar*2);
         reflectionV = reflectionV.sub(_lightV);
-        RgbColor pRGB = _iP.multScalar(  (float) (materialCoff*Math.pow(_dir.scalar(reflectionV), n))   );
+        float alpha = (float) _dir.angle(reflectionV);
+        float beta = (float) _lightV.angle(reflectionV);
+        if (beta > Math.PI/2 || alpha > Math.PI/2)
+        {
+            return lRGB;
+        }
+        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * (float) Math.pow(_dir.scalar(reflectionV), n))  );
 
         return   pRGB.add(lRGB);
     }

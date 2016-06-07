@@ -28,12 +28,12 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
-        Camera myCam = new Camera(new Vec3(0 ,0, 4), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 55f);
+        Camera myCam = new Camera(new Vec3(0 ,0, 4), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1f, new Vec3(0,0,0));
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart = new Vec3(0, 3, -5);
-        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 1f, 20));
+        Vec3 sphereStart = new Vec3(0, 0, 0);
+        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 0.8f, 20f));
 
-        Plane plane1 = new Plane(new Vec3(0,0,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
+        Plane plane1 = new Plane(new Vec3(0,1,5), new Phong(new RgbColor(0,1,0), 1f, 20), new Vec3(0, 0, -1));
         Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
 
         Shape[] shapeArray = new Shape[3];
@@ -41,7 +41,7 @@ public class Raytracer {
         shapeArray[1] = plane2;
         shapeArray[2] = sphere1;
 
-        createLight(0, new RgbColor(1,1,1), new Vec3(1, 2, 10));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 0, 10));
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
