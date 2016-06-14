@@ -31,17 +31,18 @@ public class Raytracer {
         Camera myCam = new Camera(new Vec3(0 ,0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 90f, new Vec3(0,0,0));
         Vec3 start = myCam.getPosition();
         Vec3 sphereStart1 = new Vec3(0, 0, -3);
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 20f));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 5));
         Vec3 sphereStart2 = new Vec3(0, 1, -5);
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 20f));
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
 
-        Plane plane1 = new Plane(new Vec3(2,0,0), new Phong(new RgbColor(0,1,1), 1f, 20), new Vec3(0, 0, 1));
-        Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
+        Plane plane1 = new Plane(new Vec3(2,0,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(1, 0, 0));
+        Plane plane2 = new Plane(new Vec3(0,0,0), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
 
         Shape[] shapeArray = new Shape[3];
         shapeArray[0] = plane1;
-        shapeArray[1] = sphere2;
-        shapeArray[2] = sphere1;
+       // shapeArray[1] = plane2;
+        shapeArray[1] = sphere1;
+        shapeArray[2] = sphere2;
 
         createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(7, 4, 10));
 
@@ -61,6 +62,7 @@ public class Raytracer {
 
                     if(tempInters.hit && (tempDis < smallestDistance || smallestDistance < 0)) {
                         inters = tempInters;
+                        Log.print(this,"Schnitt");
                     }
                 }
 
