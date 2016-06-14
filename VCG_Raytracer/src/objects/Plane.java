@@ -30,14 +30,14 @@ public class Plane extends Shape {
         Intersection inters = new Intersection();
 
         // Berechnung des Abstands zum Ursprung
-        Vec3 origin = new Vec3(0,0,0);
-        float a = this.normal.scalar(super.position);
-        this.q = this.normal.scalar(origin)-a;
+        //Vec3 origin = new Vec3(0,0,0);
+        //float a = this.normal.scalar(super.position); // q ist immer 0
+        //this.q = this.normal.scalar(origin)-a;
 
-        Vec3 start = _ray.getStartPoint().sub(super.position);
+        Vec3 start = _ray.getStartPoint();
         Vec3 dir = _ray.getDirection();
 
-        float f1 = this.normal.scalar(start)+q; //Pn * P0 +Q
+        float f1 = this.normal.scalar(start);//+q; //Pn * P0 +Q
         float f2 = this.normal.scalar(dir); //Pn * D
 
         float t0 = -(f1/f2);

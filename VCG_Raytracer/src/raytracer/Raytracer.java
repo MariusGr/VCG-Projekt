@@ -28,32 +28,40 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
-        Camera myCam = new Camera(new Vec3(0 ,0, 4), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 1f, new Vec3(0,0,0));
+        Camera myCam = new Camera(new Vec3(0 ,0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 90f, new Vec3(0,0,0));
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart = new Vec3(0, 0, 0);
-        Sphere sphere1 = new Sphere(1, sphereStart, new Phong(new RgbColor(1,0,0), 0.8f, 20f));
+        Vec3 sphereStart1 = new Vec3(0, 0, -3);
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 20f));
+        Vec3 sphereStart2 = new Vec3(0, 1, -5);
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 20f));
 
-        Plane plane1 = new Plane(new Vec3(0,1,5), new Phong(new RgbColor(0,1,0), 1f, 20), new Vec3(0, 0, -1));
+        Plane plane1 = new Plane(new Vec3(0,1,-4), new Phong(new RgbColor(0,1,0), 1f, 20), new Vec3(0, 0, 1));
         Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
 
         Shape[] shapeArray = new Shape[3];
         shapeArray[0] = plane1;
-        shapeArray[1] = plane2;
+        shapeArray[1] = sphere2;
         shapeArray[2] = sphere1;
 
-        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 0, 10));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(7, 4, 10));
 
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
                 Vec3 dest = myCam.calculateDestination(i, j);
                 Ray r = new Ray(start, dest.sub(start), 200);
-                float distance;     // Distanz von Kamera zum Schnittpunkt
 
-                //for (int g) { //unfertig!!!!
-                    Intersection inters = sphere1.intersect(r);
+                Intersection inters = shapeArray[0].intersect(r);
+                float smallestDistance = inters.distance;
 
-                    distance = inters.distance;
-                //}
+                for (int k = 1; k < shapeArray.length; k++) { //unfertig!!!!
+                    Intersection tempInters = shapeArray[k].intersect(r);
+                    float tempDis = tempInters.distance;
+
+
+                    if(tempDis > 0 && (tempDis < smallestDistance || smallestDistance < 0)) {
+                        inters = tempInters;
+                    }
+                }
 
                 mRenderWindow.setPixel(mBufferedImage, inters.rgb, new Vec2(i, j));
             }

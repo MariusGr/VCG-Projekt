@@ -1,6 +1,8 @@
 package objects;
 
 import material.Material;
+import raytracer.Intersection;
+import raytracer.Ray;
 import utils.Vec3;
 
 /**
@@ -14,8 +16,8 @@ public class Shape extends SceneObject {
         material = _material;
     }
 
-    public void intersect()
+    public Intersection intersect(Ray r)
         {
-
+            return null;
         }
 }

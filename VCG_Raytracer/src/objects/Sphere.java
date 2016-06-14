@@ -55,6 +55,7 @@ public class Sphere extends Shape {
 
             RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
 
+            inters.distance = t0;
             inters.shape = this;
             inters.hit = (d >= 0);
             inters.interSectionPoint = intersectP;

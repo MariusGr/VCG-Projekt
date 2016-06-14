@@ -22,7 +22,7 @@ public class Phong extends Material {
         Vec3 reflectionV = _normal.multScalar(nlScalar*2);
         reflectionV = reflectionV.sub(_lightV);
         float alpha = (float) _dir.angle(reflectionV);
-        float beta = (float) _lightV.angle(reflectionV);
+        float beta = (float) _lightV.angle(_normal);
         if (beta > Math.PI/2 || alpha > Math.PI/2)
         {
             return lRGB;

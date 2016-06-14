@@ -22,7 +22,7 @@ public class Camera extends SceneObject {
         super(_pos); // Kamera Position im Globalen Koordinatensystem
         this.lookAt = _lokA.normalize(); //Lookat Vektor
         this.userUpVector = _up;  //UserupVektor
-        this.alpha = _alpha; //ViewAngle Kamera -> Öffnungswinkel der Kamera
+        this.alpha = (float) Math.toRadians(_alpha); //ViewAngle Kamera -> Öffnungswinkel der Kamera
         this.vVector = _centerOI.sub(_pos);
         this.sVector = vVector.cross(_up).normalize();
         this.uVector = sVector.cross(vVector).normalize(); //uVektor
@@ -31,7 +31,7 @@ public class Camera extends SceneObject {
         this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
 
         //this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
-        this.focalLength = (float) ((viewPlaneW/2f)/Math.tan(alpha/2f));
+        this.focalLength = (float) ((viewPlaneW/2f)/Math.tan(alpha/2f));    // Braucht man noch? ****************************************
         //this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
     }
 
@@ -42,7 +42,7 @@ public class Camera extends SceneObject {
     }
 
     private Vec3 viewPlaneCenter() {
-        return super.position.add(vVector);
+        return super.position.add(vVector.multScalar(focalLength));
     }
 
     public Vec3 calculateDestination(int _x, int _y) {
