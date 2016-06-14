@@ -35,7 +35,7 @@ public class Raytracer {
         Vec3 sphereStart2 = new Vec3(0, 1, -5);
         Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 20f));
 
-        Plane plane1 = new Plane(new Vec3(0,1,-4), new Phong(new RgbColor(0,1,0), 1f, 20), new Vec3(0, 0, 1));
+        Plane plane1 = new Plane(new Vec3(2,0,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(0, 0, 0));
         Plane plane2 = new Plane(new Vec3(0,1,0.1f), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 1, 0));
 
         Shape[] shapeArray = new Shape[3];
@@ -51,14 +51,15 @@ public class Raytracer {
                 Ray r = new Ray(start, dest.sub(start), 200);
 
                 Intersection inters = shapeArray[0].intersect(r);
-                float smallestDistance = inters.distance;
+                float smallestDistance = -1;
+                if (inters.hit) smallestDistance = inters.distance;
 
                 for (int k = 1; k < shapeArray.length; k++) { //unfertig!!!!
                     Intersection tempInters = shapeArray[k].intersect(r);
                     float tempDis = tempInters.distance;
 
 
-                    if(tempDis > 0 && (tempDis < smallestDistance || smallestDistance < 0)) {
+                    if(tempInters.hit && (tempDis < smallestDistance || smallestDistance < 0)) {
                         inters = tempInters;
                     }
                 }

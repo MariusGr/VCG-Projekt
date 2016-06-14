@@ -34,7 +34,7 @@ public class Plane extends Shape {
         //float a = this.normal.scalar(super.position); // q ist immer 0
         //this.q = this.normal.scalar(origin)-a;
 
-        Vec3 start = _ray.getStartPoint();
+        Vec3 start = _ray.getStartPoint().sub(super.position);
         Vec3 dir = _ray.getDirection();
 
         float f1 = this.normal.scalar(start);//+q; //Pn * P0 +Q
@@ -43,7 +43,6 @@ public class Plane extends Shape {
         float t0 = -(f1/f2);
 
         Vec3 intersectP = dir.multScalar(t0).add(super.position);           // Schnittpunkt von gesendeten Strahl mit der Kugel
-        Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
 
         Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts
@@ -51,8 +50,9 @@ public class Plane extends Shape {
 
         RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
 
+        inters.distance = t0;
         inters.shape = this;
-        inters.hit = (f2 != 0);
+        inters.hit = (f2 > 0);
         inters.interSectionPoint = intersectP;
         inters.normal = normal;
         inters.rgb = RgbAtIntersect;
