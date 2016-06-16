@@ -39,7 +39,7 @@ public class RgbColor {
     }
 
     public RgbColor add(RgbColor color){
-        return new RgbColor( colors.add(color.colors) );
+        return new RgbColor( colors.add(color.colors));
     }
 
     public RgbColor multRGB(RgbColor color){

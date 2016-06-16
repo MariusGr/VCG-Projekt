@@ -1,5 +1,6 @@
 package material;
 
+import utils.Log;
 import utils.RgbColor;
 import utils.Vec3;
 
@@ -13,6 +14,9 @@ public class Lambert extends Material {
     }
 
     public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV) {
+        if (_iP == null || super.color == null || _normal == null || _lightV == null) {
+            Log.print(this, "jajaj");
+        }
         return _iP.multRGB(super.color.multScalar(materialCoff).multScalar( _normal.scalar(_lightV)));
     }
 }

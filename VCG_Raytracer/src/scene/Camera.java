@@ -28,7 +28,7 @@ public class Camera extends SceneObject {
         this.uVector = sVector.cross(vVector).normalize(); //uVektor
 
         this.viewPlaneH = (float) (2f*Math.tan(alpha/2f)); // Berechnung Höhe ViewPlane
-        this.viewPlaneW = ratio*viewPlaneH;                 // Wird noch gebraucht?
+        this.viewPlaneW = ratio*viewPlaneH;                 // TODO: Wird noch gebraucht?***************
 
         //this.focalLength = (viewPlaneH/2)/((float) Math.tan(alpha/2));   // h = viewPlaneH, alpha = Öffnungswinkel, Ergebnis: Länge einer Dreiecksseite bzw. Länge von viewVector
         this.focalLength = (float) ((viewPlaneW/2f)/Math.tan(alpha/2f));    // Braucht man noch? ****************************************
@@ -65,7 +65,7 @@ public class Camera extends SceneObject {
      * @param _v2 Position in px auf der attsächlichen Bildfläche
      * @return normierte Position auf der scene.Viewplane
      */
-    private Vec2 pNorm(Vec2 _v2) {
+    private Vec2 pNorm(Vec2 _v2) {  //LookUpTable **********************************************
         float x = _v2.x;
         float y = _v2.y;
         float newX = pNormCalculate(x, (float) Main.IMAGE_WIDTH);

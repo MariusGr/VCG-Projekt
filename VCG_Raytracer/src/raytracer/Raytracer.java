@@ -19,6 +19,8 @@ public class Raytracer {
     private BufferedImage mBufferedImage;
     private Window mRenderWindow;
     public static ArrayList<Light> lightList = new ArrayList<Light>();
+    public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
+    public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
 
     public Raytracer(Window renderWindow){
         mBufferedImage = renderWindow.getBufferedImage();
@@ -28,45 +30,58 @@ public class Raytracer {
     public void renderScene(){
         Log.print(this, "Start rendering");
 
+        // Camera  -----------------------------------------------------------------------
         Camera myCam = new Camera(new Vec3(0 ,0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 90f, new Vec3(0,0,0));
         Vec3 start = myCam.getPosition();
-        Vec3 sphereStart1 = new Vec3(0, 0, -3);
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 5));
-        Vec3 sphereStart2 = new Vec3(0, 1, -5);
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
 
-        Plane plane1 = new Plane(new Vec3(2,0,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(1, 0, 0));
+        // Shapes Positions -----------------------------------------------------------------------
+        Vec3 sphereStart1 = new Vec3(0, 0, -3);
+        Vec3 sphereStart2 = new Vec3(0, 1, -5);
+        Vec3 sphereStart3 = new Vec3(-1, -1, -2);
+
+        // Shapes -----------------------------------------------------------------------
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 5));
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
+        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f, 5));
+
+        Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(0, -1, 0));
         Plane plane2 = new Plane(new Vec3(0,0,0), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
 
-        Shape[] shapeArray = new Shape[3];
-        shapeArray[0] = plane1;
-       // shapeArray[1] = plane2;
-        shapeArray[1] = sphere1;
-        shapeArray[2] = sphere2;
+        // Shape Array -----------------------------------------------------------------------
+        // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
+        Shape[] shapeArray = new Shape[4];
+        shapeArray[0] = sphere2;
+        shapeArray[1] = sphere3;
+        shapeArray[2] = sphere1;
+        shapeArray[3] = plane1;
+
+        // Lights -----------------------------------------------------------------------
 
         createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(7, 4, 10));
 
+        // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
             for (int i = 0; i < mBufferedImage.getWidth(); i++) {
-                Vec3 dest = myCam.calculateDestination(i, j);
-                Ray r = new Ray(start, dest.sub(start), 200);
+                Vec3 dest = myCam.calculateDestination(i, j);       // Zielpunkt des Strahls ist das Äquivalent auf der Viewplane
+                Ray r = new Ray(start, dest.sub(start), 200);       // Strahl, der durch den aktuellen Pixel geht
 
-                Intersection inters = shapeArray[0].intersect(r);
-                float smallestDistance = -1;
-                if (inters.hit) smallestDistance = inters.distance;
+                // Folgende Werte müssen initialisert werden, indem sie für das erste Objekt im Array geprüft werden
+                Intersection inters = shapeArray[0].intersect(r);   // wird am Ende der folgenden Schleife den rellevanten/nahesten Treffer beinhalten
+                float smallestDistance = -1;                        // speichert die Distanz des bisher nahesten Treffers
+                if (inters.hit) smallestDistance = inters.distance; // Wenn das erste Objekt schon einen Treffer hat, Distanz zum Vergleich mit evtl. weiteren Treffern speichern
 
-                for (int k = 1; k < shapeArray.length; k++) { //unfertig!!!!
-                    Intersection tempInters = shapeArray[k].intersect(r);
-                    float tempDis = tempInters.distance;
+                for (int k = 1; k < shapeArray.length; k++) {           // alle restliches Shapes durchlaufen...
+                    Intersection tempInters = shapeArray[k].intersect(r);   // Treffer mit momentan betrachteter Shape prüfen
+                    float tempDis = tempInters.distance;                // -1 --> kein Treffer, >1 Treffer mit Distanz "distance"
 
-
+                    // Gab es einen Treffer? Ist dieser näher als der vorherige bzw. wenn es keinen gab bisher, setze diesen als rellevanten
                     if(tempInters.hit && (tempDis < smallestDistance || smallestDistance < 0)) {
                         inters = tempInters;
-                        Log.print(this,"Schnitt");
+                        smallestDistance = tempDis;
                     }
                 }
 
-                mRenderWindow.setPixel(mBufferedImage, inters.rgb, new Vec2(i, j));
+                mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
             }
         }
         IO.saveImageToPng(mBufferedImage, "RenderBilder\\raytracing"+System.currentTimeMillis()+".png");

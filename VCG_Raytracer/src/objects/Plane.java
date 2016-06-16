@@ -13,7 +13,6 @@ import utils.Vec3;
  * Created by PraktikumCG on 19.04.2016.
  */
 public class Plane extends Shape {
-    private Vec3 normal;
     private float q;        //Abstand zum Ursprung
 
     private Matrix4 translateM;
@@ -21,15 +20,11 @@ public class Plane extends Shape {
 
     public Plane(Vec3 _position, Material _material, Vec3 _normal) {
         super(_position, _material);
-        this.normal = _normal.normalize();
+        super.normal = _normal.normalize();
 
         this.translateM = new Matrix4().translate(super.position);
         this.invM = translateM.invert();
-
-
     }
-
-
 
     public Intersection intersect(Ray _ray) {
 
@@ -55,24 +50,12 @@ public class Plane extends Shape {
         Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
         intersectP = translateM.multVec3(intersectP, true);
 
-        Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
-        Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts
-        Vec3 lVector = lPos.sub(intersectP).normalize();// Vektor von Schnittpunkt zu Lichtquelle
-
-
-
-
-
-
-        RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
-
+        // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
         inters.distance = t0;
         inters.shape = this;
+        inters.inRay = _ray;
         inters.hit = (f2 > 0);
         inters.interSectionPoint = intersectP;
-        inters.normal = normal;
-        inters.rgb = RgbAtIntersect;
-
 
         return inters;
     }

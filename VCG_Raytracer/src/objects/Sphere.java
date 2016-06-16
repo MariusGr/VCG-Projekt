@@ -41,29 +41,26 @@ public class Sphere extends Shape {
         float t0 =  ((   -b - (float) Math.sqrt(d)   )/2f);
         float t1 =  ((   -b +(float)  Math.sqrt(d)   )/2f);
 
-        if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen
+        if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen******************************
             if(t1 < t0 && t1 >= 0) t0 = t1; // Welches t ist näher an der Kamera?
 
             Matrix4 translateMStart = new Matrix4().translate(start);
             Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
             intersectP = translateM.multVec3(intersectP, true);
-            Vec3 normal = intersectP.sub(super.position).normalize();   // Normale berechnen vom Mittelpunkt der Kugel zum Schnittpunkt
 
-            Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
-            Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts
-            Vec3 lVector = lPos.sub(intersectP).normalize();            // Vektor von Schnittpunkt zu Lichtquelle
-
-            RgbColor RgbAtIntersect = material.getColor(l.getColor(), normal, lVector, dir);
-
+            // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
             inters.distance = t0;
             inters.shape = this;
+            inters.inRay = _ray;
             inters.hit = (d >= 0);
             inters.interSectionPoint = intersectP;
-            inters.normal = normal;
-            inters.rgb = RgbAtIntersect;
-
         }
 
         return inters;
+    }
+
+    public Vec3 getNormal(Vec3 pointOnSurface) {
+        Vec3 normal = pointOnSurface.sub(super.position).normalize();   // Normale geht vom Ursprung der Kugel durch den Punkt auf ihrer Oberfläche
+        return normal;
     }
 }
