@@ -5,6 +5,7 @@ import light.PointLight;
 import material.Blinn;
 import material.Lambert;
 import material.Phong;
+import material.Reflection;
 import objects.Plane;
 import objects.Shape;
 import objects.Sphere;
@@ -41,7 +42,7 @@ public class Raytracer {
         Vec3 sphereStart3 = new Vec3(-1, -1, -2);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Blinn(new RgbColor(0,0,1), 0.8f, 20));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Reflection(new RgbColor(0,1,1), 0.8f));
         Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
         Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f, 20));
 

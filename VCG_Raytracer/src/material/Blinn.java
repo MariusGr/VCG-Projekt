@@ -20,7 +20,6 @@ public class Blinn extends Material {
         _dir = _dir.multScalar(-1);
         Lambert lam = new Lambert(this.color, 1f);
 
-        Float nh = 0.5f;
         Vec3 h = (_lightV.add(_dir)).normalize();                   // Berechnung H Vektor
 
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
