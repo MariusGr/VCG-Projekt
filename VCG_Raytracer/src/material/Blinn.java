@@ -19,15 +19,18 @@ public class Blinn extends Material {
 
         _dir = _dir.multScalar(-1);
         Lambert lam = new Lambert(this.color, 1f);
+
+        Float nh = 0.5f;
+        Vec3 h = (_lightV.add(_dir)).normalize();                   // Berechnung H Vektor
+
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
         float nlScalar =_normal.scalar(_lightV);                    //Normalenvektor mal Lichtvektor
         Vec3 reflectionV = _normal.multScalar(nlScalar*2);
         reflectionV = reflectionV.sub(_lightV);
-        float alpha = (float) _dir.angle(reflectionV);
-        float beta = (float) _lightV.angle(_normal);
+        float alpha = (float) _normal.angle(_lightV);
+        float beta = (float) _normal.angle(h);
 
-        Float nh = 0.5f;
-        Vec3 h = (_lightV.add(_dir)).normalize();
+
 
 
         if (beta > Math.PI/2 || alpha > Math.PI/2)
