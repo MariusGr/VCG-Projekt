@@ -30,7 +30,11 @@ public class Reflection extends Material {
 
         float m = 0.6f;                                             // Standardabweichung in der Verteilung
 
-        float d = (float) Math.pow(Math.E,(-(alpha/Math.pow (m,2f) ) ) ) ; // Gaußverteilung
+        // Gaußverteilung
+        float d1 = (float) Math.pow(Math.E,(-(alpha/Math.pow (m,2f) ) ) ) ;
+
+        //Beckmannverteilung
+        float d2 = (float) (Math.pow(Math.E,(-(Math.pow (Math.tan(alpha)/m,2) ) ) ))/4* (float) (Math.pow(m,2)*Math.pow(Math.cos(alpha),4));
 
         // Selbstschattierung
         float nh = _normal.scalar(h);       //Normale mal Halbvektor
@@ -63,7 +67,7 @@ public class Reflection extends Material {
             return lRGB;
         }*/
 
-        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * ((d*g3*f)/_normal.scalar(_dir))));
+        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * ((d2*g3*f)/_normal.scalar(_dir))));
 
 
         return   pRGB.add(lRGB);
