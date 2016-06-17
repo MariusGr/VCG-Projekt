@@ -63,7 +63,7 @@ public class Reflection extends Material {
             return lRGB;
         }*/
 
-        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * (d*g3*f)/_normal.scalar(_dir)));
+        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * ((d*g3*f)/_normal.scalar(_dir))));
 
 
         return   pRGB.add(lRGB);
