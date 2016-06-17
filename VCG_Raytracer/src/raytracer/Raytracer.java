@@ -2,6 +2,7 @@ package raytracer;
 
 import light.Light;
 import light.PointLight;
+import material.Blinn;
 import material.Lambert;
 import material.Phong;
 import objects.Plane;
@@ -40,20 +41,22 @@ public class Raytracer {
         Vec3 sphereStart3 = new Vec3(-1, -1, -2);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(1,0,0), 0.8f, 5));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Blinn(new RgbColor(0,0,1), 0.8f, 20));
         Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
-        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f, 5));
+        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f, 20));
 
         Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(0, -1, 0));
         Plane plane2 = new Plane(new Vec3(0,0,0), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
-        Shape[] shapeArray = new Shape[4];
+        Shape[] shapeArray = new Shape[3];
         shapeArray[0] = sphere2;
         shapeArray[1] = sphere3;
         shapeArray[2] = sphere1;
-        shapeArray[3] = plane1;
+        //shapeArray[3] = plane1;
+        //shapeArray[4] = plane2;
+
 
         // Lights -----------------------------------------------------------------------
 

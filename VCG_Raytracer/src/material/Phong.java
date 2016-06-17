@@ -15,6 +15,7 @@ public class Phong extends Material {
     }
 
     public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV, Vec3 _dir) {
+
         _dir = _dir.multScalar(-1).normalize();
         Lambert lam = new Lambert(this.color, 1f);
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
