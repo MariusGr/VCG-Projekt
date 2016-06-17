@@ -30,21 +30,21 @@ public class Raytracer {
     }
 
     public void renderScene(){
-        Log.print(this, "Start rendering");
+        Log.print(this, "Start rendering!");
 
         // Camera  -----------------------------------------------------------------------
         Camera myCam = new Camera(new Vec3(0 ,0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 90f, new Vec3(0,0,0));
         Vec3 start = myCam.getPosition();
 
         // Shapes Positions -----------------------------------------------------------------------
-        Vec3 sphereStart1 = new Vec3(0, 0, -3);
-        Vec3 sphereStart2 = new Vec3(0, 1, -5);
-        Vec3 sphereStart3 = new Vec3(-1, -1, -2);
+        Vec3 sphereStart1 = new Vec3(-1, 1, -5);
+        Vec3 sphereStart2 = new Vec3(0, 0, -3);
+        Vec3 sphereStart3 = new Vec3(0, -1, -2);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Reflection(new RgbColor(0,1,1), 0.8f));
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 0.8f, 5));
-        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f, 20));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Reflection(new RgbColor(0,1,1),1));
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Reflection(new RgbColor(0,1,0), 1));
+        Sphere sphere3 = new Sphere(1, sphereStart3, new Reflection(new RgbColor(0,0,1), 0.8f));
 
         Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(0, -1, 0));
         Plane plane2 = new Plane(new Vec3(0,0,0), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
@@ -61,7 +61,7 @@ public class Raytracer {
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(7, 4, 10));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 4, 10));
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {

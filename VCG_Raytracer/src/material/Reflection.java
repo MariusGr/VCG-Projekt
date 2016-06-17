@@ -1,5 +1,6 @@
 package material;
 
+import utils.Log;
 import utils.RgbColor;
 import utils.Vec3;
 
@@ -16,13 +17,13 @@ public class Reflection extends Material {
 
     public RgbColor getColor(RgbColor _iP, Vec3 _normal, Vec3 _lightV, Vec3 _dir) {
 
-        _dir = _dir.multScalar(-1).normalize();
+        _dir = _dir.multScalar(-1);
         Lambert lam = new Lambert(this.color, 1f);
 
-        Vec3 h = (_lightV.add(_dir)).normalize();                   // Berechnung H Vektor
+        Vec3 h =  (_lightV.add(_dir).multScalar(0.5f));                   // Berechnung H Vektor
 
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
-        float nlScalar =_normal.scalar(_lightV); //Normalenvektor mal Lichtvektor
+        float nlScalar =_normal.scalar(_lightV);                    //Normalenvektor mal Lichtvektor
         Vec3 reflectionV = _normal.multScalar(nlScalar*2);
         reflectionV = reflectionV.sub(_lightV);
         float alpha = (float) _normal.angle(h);
@@ -48,12 +49,14 @@ public class Reflection extends Material {
         float g2 = 2*(nh*nv)/vh;
         //Shadowing
         float g3 = 2*(nh*nl)/vh;
+       // Log.print(this, "D1:"+d1);
+        //Log.print(this, "G2:"+g2);
 
 
-        // Fresnelterm
+        // Fresnelterm in Rechnung 1 da Reflektion ! Sonst Formel
 
-        int n1 =1;
-        float n2 = 1.5f;
+        float n1 =1.5f;
+        float n2 = 5f;
 
         float fParalel = (float) ((n2*Math.cos(alpha)-n1*Math.cos(beta))/(n2*Math.cos(alpha)+n1*Math.cos(beta)));
         float fSenkrecht = (float)((n1*Math.cos(alpha)-n2*Math.cos(beta))/(n2*Math.cos(alpha)+n1*Math.cos(beta)));
@@ -62,12 +65,12 @@ public class Reflection extends Material {
 
 
 
-       /* if (beta > Math.PI/2 || alpha > Math.PI/2)
+        /*if (beta > Math.PI/2 || alpha > Math.PI/2)
         {
             return lRGB;
         }*/
 
-        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * ((d2*g3*f)/_normal.scalar(_dir))));
+        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * ((d1*g1*1)/(_normal.scalar(_dir)))));
 
 
         return   pRGB.add(lRGB);
