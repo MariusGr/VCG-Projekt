@@ -89,6 +89,21 @@ public class Raytracer {
                         smallestDistance = tempDis;
                     }
                 }
+
+                for (Light light : lightList)
+                {
+                    Ray shadowRay = new Ray (light.getPosition(), inters.interSectionPoint);
+                    float lightDistance = shadowRay.getDistance();
+                    for (int m = 0; m < shapeArray.length; m++)
+                    {
+                        if (shapeArray[m] != inters.shape)
+                        {
+                            Intersection shadowInters = shapeArray[m].intersect(shadowRay);
+                            if ((shadowInters.distance > 0) && (shadowInters.distance >= lightDistance)) inters.hit = false;
+                        }
+                    }
+                }
+
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
             }
         }
