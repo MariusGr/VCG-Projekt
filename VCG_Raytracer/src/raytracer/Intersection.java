@@ -18,6 +18,7 @@ public class Intersection {
     public float distance;
     public Boolean incoming;
     public Boolean hit;
+    public Boolean shadow;
 
     public Intersection() {
         interSectionPoint = null;
@@ -28,6 +29,7 @@ public class Intersection {
         distance = -1;
         incoming = false;
         hit = false;
+        shadow = false;
     }
 
 
@@ -47,6 +49,7 @@ public class Intersection {
 
     public RgbColor getRgbColor() {
         if(!this.hit) return Raytracer.backgroundColor; // Wenn kein Objekt getroffen wird, wird dieser Wert für den Pixel verwendet --> Hintergrundfarbe der Szene
+        if(this.shadow) return new RgbColor(0.1f,0.1f,0.1f); //Im Schatten ambientes Licht
 
         Light l = Raytracer.lightList.get(0);           // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                    // Position des aktuell betrachteten Lichts

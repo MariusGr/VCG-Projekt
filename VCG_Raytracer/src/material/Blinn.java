@@ -23,9 +23,6 @@ public class Blinn extends Material {
         Vec3 h = (_lightV.add(_dir)).multScalar(0.5f).normalize();                   // Berechnung H Vektor
 
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
-        float nlScalar =_normal.scalar(_lightV);                    //Normalenvektor mal Lichtvektor
-        Vec3 reflectionV = _normal.multScalar(nlScalar*2);
-        reflectionV = reflectionV.sub(_lightV);
         float alpha = (float) _normal.angle(_lightV);
         float beta = (float) _normal.angle(h);
 

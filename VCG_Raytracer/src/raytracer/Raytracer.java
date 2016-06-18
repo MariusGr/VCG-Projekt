@@ -46,11 +46,11 @@ public class Raytracer {
         Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0.9f,0.6f,0),1,5));
         Sphere sphere2 = new Sphere(1, sphereStart2, new Blinn(new RgbColor(0,0,1),0.8f,5));
 
-        Plane plane1 = new Plane(new Vec3(0,-2,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 1, 0));
-        Plane plane2 = new Plane(new Vec3(0,0,-8), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 0, 1));
-        Plane plane3 = new Plane(new Vec3(0,2.3f,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, -1, 0));
-        Plane plane4 = new Plane(new Vec3(2.3f,0,0), new Phong(new RgbColor(0,1,0), 1f, 10), new Vec3(-1, 0, 0));
-        Plane plane5 = new Plane(new Vec3(-2.3f,0,0), new Phong(new RgbColor(1,0,0), 1f, 10), new Vec3(1, 0, 0));
+        Plane plane1 = new Plane(new Vec3(0,-3f,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 1, 0));
+        Plane plane2 = new Plane(new Vec3(0,0,-8f), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 0, 1));
+        Plane plane3 = new Plane(new Vec3(0,3f,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, -1, 0));
+        Plane plane4 = new Plane(new Vec3(3f,0,0), new Phong(new RgbColor(0,1,0), 1f, 10), new Vec3(-1, 0, 0));
+        Plane plane5 = new Plane(new Vec3(-3f,0,0), new Phong(new RgbColor(1,0,0), 1f, 10), new Vec3(1, 0, 0));
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
@@ -66,7 +66,7 @@ public class Raytracer {
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 1.5f, 0));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(-1.5f, 1f, 2f));
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
@@ -90,16 +90,20 @@ public class Raytracer {
                     }
                 }
 
-                for (Light light : lightList)
+                for (Light light : lightList) //alle Lichter der Szene durchgehen
                 {
-                    Ray shadowRay = new Ray (light.getPosition(), inters.interSectionPoint);
-                    float lightDistance = shadowRay.getDistance();
-                    for (int m = 0; m < shapeArray.length; m++)
+                    Ray shadowRay = new Ray (inters.interSectionPoint, light.getPosition().sub(inters.interSectionPoint), 20); //Strahl von IntersectionPoint zu Licht senden
+                    float lightDistance = light.getPosition().sub(inters.interSectionPoint).length(); //Distanz von Licht zu IntersectionPoint
+                    for (int m = 0; m < shapeArray.length; m++) // alle Szenenobjekte durchgehen
                     {
-                        if (shapeArray[m] != inters.shape)
+                        if (shapeArray[m] != inters.shape) //außer aktuelles Objekt
                         {
-                            Intersection shadowInters = shapeArray[m].intersect(shadowRay);
-                            if ((shadowInters.distance > 0) && (shadowInters.distance >= lightDistance)) inters.hit = false;
+                            Intersection shadowInters = shapeArray[m].intersect(shadowRay); //Intersection zwischen Objekt und Licht testen
+                            if (shadowInters.hit)
+                            {
+                                if ((shadowInters.distance > 0) && (shadowInters.distance < lightDistance)) //wenn getroffenes Objekt zwischen Licht und Punkt liegt, male Schatten
+                                    inters.shadow = true;
+                            }
                         }
                     }
                 }
