@@ -2,10 +2,10 @@ package raytracer;
 
 import light.Light;
 import light.PointLight;
-import material.Blinn;
+//import material.Blinn;
 import material.Lambert;
 import material.Phong;
-import material.Reflection;
+//import material.Reflection;
 import objects.Plane;
 import objects.Shape;
 import objects.Sphere;
@@ -42,26 +42,26 @@ public class Raytracer {
         Vec3 sphereStart3 = new Vec3(0, -1, -2);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Reflection(new RgbColor(0,1,1),1));
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Reflection(new RgbColor(0,1,0), 1));
-        Sphere sphere3 = new Sphere(1, sphereStart3, new Reflection(new RgbColor(0,0,1), 0.8f));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0,1,1),1,5));
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 1,5));
+        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f,5));
 
-        Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 20), new Vec3(0, -1, 0));
-        Plane plane2 = new Plane(new Vec3(0,0,0), new Phong(new RgbColor(1,0,0), 1f, 20), new Vec3(0, 0, 1));
+        Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 5), new Vec3(0, 1, 0));
+        Plane plane2 = new Plane(new Vec3(0,0,-10), new Phong(new RgbColor(1,0,0), 1f, 5), new Vec3(0, 0, 1));
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
-        Shape[] shapeArray = new Shape[3];
+        Shape[] shapeArray = new Shape[5];
         shapeArray[0] = sphere2;
         shapeArray[1] = sphere3;
         shapeArray[2] = sphere1;
-        //shapeArray[3] = plane1;
-        //shapeArray[4] = plane2;
+        shapeArray[3] = plane1;
+        shapeArray[4] = plane2;
 
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 4, 10));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(2, 0, -4));
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
@@ -84,7 +84,6 @@ public class Raytracer {
                         smallestDistance = tempDis;
                     }
                 }
-
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
             }
         }

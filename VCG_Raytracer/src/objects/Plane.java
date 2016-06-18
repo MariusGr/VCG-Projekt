@@ -47,14 +47,14 @@ public class Plane extends Shape {
         float t0 = -(f1/f2);
 
         Matrix4 translateMStart = new Matrix4().translate(start);
-        Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
+        Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Plane
         intersectP = translateM.multVec3(intersectP, true);
 
         // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
         inters.distance = t0;
         inters.shape = this;
         inters.inRay = _ray;
-        inters.hit = (f2 > 0);
+        inters.hit = (f2 < 0);
         inters.interSectionPoint = intersectP;
 
         return inters;
