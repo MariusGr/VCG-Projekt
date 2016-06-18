@@ -42,21 +42,31 @@ public class Plane extends Shape {
 
 
         float f1 = this.normal.scalar(start);//+q; //Pn * P0 +Q
-        float f2 = this.normal.scalar(dir); //Pn * D
+        float f2 = this.normal.scalar(dir); //Pn * D // Skalarprodukt aus Normale und Ray-Richtung. Bei 0 sind beide senkrecht. Bei groesser 0 zeigen beide in die gleiche Richtung
 
-        float t0 = -(f1/f2);
+        if (f2 >= 0) //wir koennen uns weitere Berechnungen sparen wenn PlaneNormale und Ray in die selbe Richtung oder senkrecht zeigen.
+        {
+            inters.distance = 0;
+            inters.shape = this;
+            inters.hit = false;
+            return inters;
+        }
 
-        Matrix4 translateMStart = new Matrix4().translate(start);
-        Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Plane
-        intersectP = translateM.multVec3(intersectP, true);
+        else {
+            float t0 = -(f1 / f2);
 
-        // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
-        inters.distance = t0;
-        inters.shape = this;
-        inters.inRay = _ray;
-        inters.hit = (f2 < 0);
-        inters.interSectionPoint = intersectP;
+            Matrix4 translateMStart = new Matrix4().translate(start);
+            Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Plane
+            intersectP = translateM.multVec3(intersectP, true);
 
-        return inters;
+            // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
+            inters.distance = t0;
+            inters.shape = this;
+            inters.inRay = _ray;
+            inters.hit = true;
+            inters.interSectionPoint = intersectP;
+
+            return inters;
+        }
     }
 }
