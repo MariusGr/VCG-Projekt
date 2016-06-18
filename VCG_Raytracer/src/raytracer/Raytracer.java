@@ -3,9 +3,11 @@ package raytracer;
 import light.Light;
 import light.PointLight;
 //import material.Blinn;
+import material.Blinn;
 import material.Lambert;
 import material.Phong;
 //import material.Reflection;
+import material.Reflection;
 import objects.Plane;
 import objects.Shape;
 import objects.Sphere;
@@ -37,37 +39,34 @@ public class Raytracer {
         Vec3 start = myCam.getPosition();
 
         // Shapes Positions -----------------------------------------------------------------------
-        Vec3 sphereStart1 = new Vec3(-1, 1, -5);
-        Vec3 sphereStart2 = new Vec3(0, 0, -3);
-        Vec3 sphereStart3 = new Vec3(0, -1, -2);
+        Vec3 sphereStart1 = new Vec3(1, -1, -6);
+        Vec3 sphereStart2 = new Vec3(-1, -1, -3);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0,1,1),1,5));
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Phong(new RgbColor(0,1,0), 1,5));
-        Sphere sphere3 = new Sphere(1, sphereStart3, new Phong(new RgbColor(0,0,1), 0.8f,5));
+        Sphere sphere1 = new Sphere(1, sphereStart1, new Phong(new RgbColor(0.9f,0.6f,0),1,5));
+        Sphere sphere2 = new Sphere(1, sphereStart2, new Blinn(new RgbColor(0,0,1),0.8f,5));
 
-        Plane plane1 = new Plane(new Vec3(0,-1.5f,0), new Phong(new RgbColor(0,0,1), 1f, 10), new Vec3(0, 1, 0));
-        Plane plane2 = new Plane(new Vec3(0,0,-10), new Phong(new RgbColor(1,0,0), 1f, 10), new Vec3(0, 0, 1));
-        Plane plane3 = new Plane(new Vec3(0,1.5f,0), new Phong(new RgbColor(0,1,0), 1f, 10), new Vec3(0, -1, 0));
-        Plane plane4 = new Plane(new Vec3(1.5f,0,0), new Phong(new RgbColor(0,0,1), 1f, 10), new Vec3(-1, 0, 0));
-        Plane plane5 = new Plane(new Vec3(-1.5f,0,0), new Phong(new RgbColor(1,0,0), 1f, 10), new Vec3(1, 0, 0));
+        Plane plane1 = new Plane(new Vec3(0,-2,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 1, 0));
+        Plane plane2 = new Plane(new Vec3(0,0,-8), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, 0, 1));
+        Plane plane3 = new Plane(new Vec3(0,2.3f,0), new Phong(new RgbColor(1,1,1), 1f, 10), new Vec3(0, -1, 0));
+        Plane plane4 = new Plane(new Vec3(2.3f,0,0), new Phong(new RgbColor(0,1,0), 1f, 10), new Vec3(-1, 0, 0));
+        Plane plane5 = new Plane(new Vec3(-2.3f,0,0), new Phong(new RgbColor(1,0,0), 1f, 10), new Vec3(1, 0, 0));
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
-        Shape[] shapeArray = new Shape[8];
+        Shape[] shapeArray = new Shape[7];
         shapeArray[0] = sphere2;
-        shapeArray[1] = sphere3;
-        shapeArray[2] = sphere1;
-        shapeArray[3] = plane1;
-        shapeArray[4] = plane2;
-        shapeArray[5] = plane3;
-        shapeArray[6] = plane4;
-        shapeArray[7] = plane5;
+        shapeArray[1] = sphere1;
+        shapeArray[2] = plane1;
+        shapeArray[3] = plane2;
+        shapeArray[4] = plane3;
+        shapeArray[5] = plane4;
+        shapeArray[6] = plane5;
 
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(1, 0, 0));
+        createLight(0, new RgbColor(0.8f,0.8f,0.8f), new Vec3(0, 1.5f, 0));
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j ++) {
