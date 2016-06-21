@@ -15,6 +15,7 @@ import utils.*;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Raytracer {
 
@@ -23,7 +24,7 @@ public class Raytracer {
     public static ArrayList<Light> lightList = new ArrayList<Light>();
     public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
     public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
-    public static Shape[] shapeArray = new Shape[7];
+    public static Shape[] shapeArray = new Shape[105];
 
     public Raytracer(Window renderWindow) {
         mBufferedImage = renderWindow.getBufferedImage();
@@ -42,10 +43,20 @@ public class Raytracer {
         Vec3 sphereStart2 = new Vec3(-1, -2, -8);
 
         // Shapes -----------------------------------------------------------------------
-        Sphere sphere1 = new Sphere(1, sphereStart1, new Blinn(new RgbColor(0.9f, 0.6f, 0), 1, 10));
-        Sphere sphere2 = new Sphere(1, sphereStart2, new Blinn(new RgbColor(0, 0, 1), 0.8f, 10));
-        sphere1.setReflection(true);
-        sphere2.setReflection(true);
+        for (int b = 0; b <100; b++)
+        {
+            Vec3 sphereStart = new Vec3(-3, 3, -12);
+            Vec3 sphereEnd = new Vec3(3, -3, 4);
+            Vec3 hor = new Vec3(new Random().nextFloat()*3f, 0, 0);
+            float bF = (float)b/100f;
+            sphereEnd = sphereEnd.sub(sphereStart).multScalar(bF);
+            sphereStart = sphereStart.add(sphereEnd).add(hor);
+
+            Sphere sphere = new Sphere(0.1f, sphereStart, new Blinn(new RgbColor(0.9f, 0.6f, 0), 1, 10));
+            sphere.setReflection(true);
+            shapeArray[b+5] = sphere;
+
+        }
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0));
         Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1));
@@ -56,13 +67,11 @@ public class Raytracer {
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
-        shapeArray[0] = sphere1;
+        shapeArray[0] = plane4;
         shapeArray[1] = plane1;
         shapeArray[2] = plane2;
         shapeArray[3] = plane3;
         shapeArray[4] = plane5;
-        shapeArray[5] = plane4;
-        shapeArray[6] = sphere2;
 
 
         // Lights -----------------------------------------------------------------------
