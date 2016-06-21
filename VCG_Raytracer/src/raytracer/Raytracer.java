@@ -38,8 +38,8 @@ public class Raytracer {
         Vec3 start = myCam.getPosition();
 
         // Shapes Positions -----------------------------------------------------------------------
-        Vec3 sphereStart1 = new Vec3(1, -1, -6);
-        Vec3 sphereStart2 = new Vec3(-1, -1, -5);
+        Vec3 sphereStart1 = new Vec3(1, -2, -10);
+        Vec3 sphereStart2 = new Vec3(-1, -2, -8);
 
         // Shapes -----------------------------------------------------------------------
         Sphere sphere1 = new Sphere(1, sphereStart1, new Blinn(new RgbColor(0.9f, 0.6f, 0), 1, 10));
@@ -48,20 +48,21 @@ public class Raytracer {
         sphere2.setReflection(true);
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0));
-        Plane plane2 = new Plane(new Vec3(0, 0, -8f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1));
+        Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1));
         Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0));
         Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0));
         Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0));
+        plane2.setReflection(true);
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
         shapeArray[0] = sphere1;
-        shapeArray[1] = sphere2;
+        shapeArray[1] = plane1;
         shapeArray[2] = plane2;
         shapeArray[3] = plane3;
         shapeArray[4] = plane5;
         shapeArray[5] = plane4;
-        shapeArray[6] = plane1;
+        shapeArray[6] = sphere2;
 
 
         // Lights -----------------------------------------------------------------------
@@ -74,7 +75,7 @@ public class Raytracer {
                 Vec3 dest = myCam.calculateDestination(i, j);       // Zielpunkt des Strahls ist das Äquivalent auf der Viewplane
                 Ray r = new Ray(start, dest.sub(start), 200);       // Strahl, der durch den aktuellen Pixel geht
 
-                Intersection inters = sendRay(r); //Strahlenberechnung für alle Objekte
+                Intersection inters = sendRay(r, null); //Strahlenberechnung für alle Objekte
                 if (inters.shape.getReflection()) //falls Reflektion gewünscht wird neuer Strahl geschickt
                 {
                     Vec3 l = r.getDirection().multScalar(-1);
@@ -83,7 +84,7 @@ public class Raytracer {
                     Vec3 zweiSkalarNIN = n.multScalar(skalarNI);
                     Vec3 refDirection = zweiSkalarNIN.sub(l);
                     Ray refRay = new Ray(inters.interSectionPoint, refDirection, 50);
-                    inters = sendRay(refRay);
+                    inters = sendRay(refRay, inters.shape);
                 }
 
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
@@ -99,7 +100,7 @@ public class Raytracer {
     }
 
 
-    public Intersection sendRay(Ray ray)
+    public Intersection sendRay(Ray ray, Shape s)
     {
         //DISANZABFRAGE
         // Folgende Werte müssen initialisert werden, indem sie für das erste Objekt im Array geprüft werden
@@ -109,15 +110,16 @@ public class Raytracer {
 
         for (int k = 0; k < shapeArray.length; k++)
         {           // alle restliches Shapes durchlaufen...
+            if(shapeArray[k] != s) {
                 Intersection tempInters = shapeArray[k].intersect(ray);   // Treffer mit momentan betrachteter Shape prüfen
                 float tempDis = tempInters.distance;                // -1 --> kein Treffer, >1 Treffer mit Distanz "distance"
 
                 // Gab es einen Treffer? Ist dieser näher als der vorherige bzw. wenn es keinen gab bisher, setze diesen als rellevanten
-                if (tempInters.hit && (tempDis < smallestDistance || smallestDistance < 0))
-                {
+                if (tempInters.hit && (tempDis < smallestDistance || smallestDistance < 0)) {
                     inters = tempInters;
                     smallestDistance = tempDis;
                 }
+            }
         }
 
         //SCHATTEN
