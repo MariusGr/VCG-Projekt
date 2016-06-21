@@ -103,7 +103,7 @@ public class Raytracer {
                             {
                                 if ((shadowInters.distance > 0) && (shadowInters.distance < lightDistance)) //wenn getroffenes Objekt zwischen Licht und Punkt liegt, male Schatten
                                 {
-                                    inters.shadowCounter++;
+                                    inters.shadowCounter++; //zählen wie viele Objekte im Weg liegen
                                 }
                             }
                         }

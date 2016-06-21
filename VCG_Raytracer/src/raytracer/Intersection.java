@@ -61,7 +61,7 @@ public class Intersection {
 
         while(shadowCounter!=0)
         {
-            rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten ambientes Licht
+            rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten Farbe abziehen
             shadowCounter--;
         }
 
