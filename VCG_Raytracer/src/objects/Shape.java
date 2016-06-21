@@ -11,12 +11,18 @@ import utils.Vec3;
 public class Shape extends SceneObject {
     protected Material material;
     protected Vec3 normal;
+    protected boolean reflection;
 
     public Shape(Vec3 _position, Material _material) {
         super(_position);
         material = _material;
         normal = null;
+        reflection = false;
     }
+
+    public boolean getReflection() {return this.reflection;}
+
+    public void setReflection(boolean b) {reflection = b;}
 
     public Intersection intersect(Ray r)
         {
