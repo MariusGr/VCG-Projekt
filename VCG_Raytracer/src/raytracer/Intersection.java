@@ -18,7 +18,7 @@ public class Intersection {
     public float distance;
     public Boolean incoming;
     public Boolean hit;
-    public Boolean shadow;
+    public int shadowCounter;
 
     public Intersection() {
         interSectionPoint = null;
@@ -29,7 +29,7 @@ public class Intersection {
         distance = -1;
         incoming = false;
         hit = false;
-        shadow = false;
+        shadowCounter = 0;
     }
 
 
@@ -50,7 +50,6 @@ public class Intersection {
     public RgbColor getRgbColor() {
         if(!this.hit) return Raytracer.backgroundColor;      // Wenn kein Objekt getroffen wird, wird dieser Wert für den Pixel verwendet --> Hintergrundfarbe der Szene
 
-
         Light l = Raytracer.lightList.get(0);               // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                        // Position des aktuell betrachteten Lichts
         Vec3 lVector = lPos.sub(interSectionPoint).normalize();            // Vektor von Schnittpunkt zu Lichtquelle
@@ -60,7 +59,11 @@ public class Intersection {
         RgbColor rgb = m.getColor(l.getColor(), shape.getNormal(interSectionPoint), lVector, direction);
         rgb = rgb.add(Raytracer.ambientLight);               // Ambientes Licht addieren, wenn es sich um den Pixel eines getroffenen Objekts handelt
 
-        if(this.shadow) rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten ambientes Licht
+        while(shadowCounter!=0)
+        {
+            rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten ambientes Licht
+            shadowCounter--;
+        }
 
         return rgb;
     }

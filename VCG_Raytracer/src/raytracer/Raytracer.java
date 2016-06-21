@@ -102,7 +102,9 @@ public class Raytracer {
                             if (shadowInters.hit)
                             {
                                 if ((shadowInters.distance > 0) && (shadowInters.distance < lightDistance)) //wenn getroffenes Objekt zwischen Licht und Punkt liegt, male Schatten
-                                    inters.shadow = true;
+                                {
+                                    inters.shadowCounter++;
+                                }
                             }
                         }
                     }
