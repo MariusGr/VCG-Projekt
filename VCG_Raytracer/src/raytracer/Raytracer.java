@@ -24,7 +24,7 @@ public class Raytracer {
     public static ArrayList<Light> lightList = new ArrayList<Light>();
     public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
     public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
-    public static Shape[] shapeArray = new Shape[105];
+    public static Shape[] shapeArray = new Shape[7];
 
     public Raytracer(Window renderWindow) {
         mBufferedImage = renderWindow.getBufferedImage();
@@ -43,7 +43,7 @@ public class Raytracer {
         Vec3 sphereStart2 = new Vec3(-1, -2, -8);
 
         // Shapes -----------------------------------------------------------------------
-        for (int b = 0; b <100; b++)
+        /*for (int b = 0; b <100; b++)
         {
             Vec3 sphereStart = new Vec3(-3, 3, -12);
             Vec3 sphereEnd = new Vec3(3, -3, 4);
@@ -56,14 +56,18 @@ public class Raytracer {
             sphere.setReflection(true);
             shapeArray[b+5] = sphere;
 
-        }
+        }*/
+        Sphere sphere1 = new Sphere (1, new Vec3(2, -2, -5), new Blinn(new RgbColor(1,0,0), 1f, 10));
+        Sphere sphere2 = new Sphere (1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0,0,1), 1f, 10));
+        sphere1.setReflection(true);
+        sphere2.setReflection(true);
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0));
         Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1));
         Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0));
         Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0));
         Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0));
-        plane2.setReflection(true);
+        //plane2.setReflection(true);
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
@@ -72,7 +76,8 @@ public class Raytracer {
         shapeArray[2] = plane2;
         shapeArray[3] = plane3;
         shapeArray[4] = plane5;
-
+        shapeArray[5] = sphere1;
+        shapeArray[6] = sphere2;
 
         // Lights -----------------------------------------------------------------------
 
@@ -85,6 +90,7 @@ public class Raytracer {
                 Ray r = new Ray(start, dest.sub(start), 200);       // Strahl, der durch den aktuellen Pixel geht
 
                 Intersection inters = sendRay(r, null); //Strahlenberechnung für alle Objekte
+                //REFLEKTION
                 if (inters.shape.getReflection()) //falls Reflektion gewünscht wird neuer Strahl geschickt
                 {
                     Vec3 l = r.getDirection().multScalar(-1);
@@ -94,6 +100,18 @@ public class Raytracer {
                     Vec3 refDirection = zweiSkalarNIN.sub(l);
                     Ray refRay = new Ray(inters.interSectionPoint, refDirection, 50);
                     inters = sendRay(refRay, inters.shape);
+
+                    //ZWEITE REFLEKTION //TODO: In Schleife mit kontrollierbarer Rekursion packen
+                    if (inters.shape.getReflection()) //falls Reflektion gewünscht wird neuer Strahl geschickt
+                    {
+                        Vec3 l2 = refRay.getDirection().multScalar(-1);
+                        Vec3 n2 = inters.shape.getNormal(inters.interSectionPoint);
+                        float skalarNI2 = n2.scalar(l2) * 2;
+                        Vec3 zweiSkalarNIN2 = n2.multScalar(skalarNI2);
+                        Vec3 refDirection2 = zweiSkalarNIN2.sub(l2);
+                        Ray refRay2 = new Ray(inters.interSectionPoint, refDirection2, 50);
+                        inters = sendRay(refRay2, inters.shape);
+                    }
                 }
 
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
