@@ -42,6 +42,10 @@ public class RgbColor {
         return new RgbColor( colors.add(color.colors));
     }
 
+    public RgbColor sub(RgbColor color){
+        return new RgbColor( colors.sub(color.colors));
+    }
+
     public RgbColor multRGB(RgbColor color){
         return new RgbColor( colors.x * color.red(),
                              colors.y * color.green(),

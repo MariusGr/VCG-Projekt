@@ -1,6 +1,7 @@
 package objects;
 
 import material.Material;
+import material.RayHandling;
 import raytracer.Intersection;
 import raytracer.Ray;
 import utils.Vec3;
@@ -11,18 +12,14 @@ import utils.Vec3;
 public class Shape extends SceneObject {
     protected Material material;
     protected Vec3 normal;
-    protected boolean reflection;
+    protected RayHandling rayHandling;
 
-    public Shape(Vec3 _position, Material _material) {
+    public Shape(Vec3 _position, Material _material, RayHandling _rayHandling) {
         super(_position);
-        material = _material;
-        normal = null;
-        reflection = false;
+        this.material = _material;
+        this.normal = null;
+        this.rayHandling = _rayHandling;
     }
-
-    public boolean getReflection() {return this.reflection;}
-
-    public void setReflection(boolean b) {reflection = b;}
 
     public Intersection intersect(Ray r)
         {
@@ -36,4 +33,6 @@ public class Shape extends SceneObject {
     public Material getMaterial() {
         return this.material;
     }
+
+    public RayHandling getRayHandling() {return rayHandling;}
 }

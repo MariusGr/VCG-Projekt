@@ -1,14 +1,15 @@
 package material;
 
 import raytracer.Ray;
-import utils.RgbColor;
 import utils.Vec3;
+import utils.RgbColor;
+
 
 /**
- * Created by PraktikumCG on 21.06.2016.
+ * Created by Marius on 24.06.2016.
  */
-public class Reflection extends RayHandling{
-    public Reflection(float _d) {
+public class Refraction extends RayHandling{
+    public Refraction(float _d) {
         super(_d);
     }
 

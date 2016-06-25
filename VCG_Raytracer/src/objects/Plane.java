@@ -2,6 +2,7 @@ package objects;
 
 import light.Light;
 import material.Material;
+import material.RayHandling;
 import raytracer.Intersection;
 import raytracer.Ray;
 import raytracer.Raytracer;
@@ -18,8 +19,8 @@ public class Plane extends Shape {
     private Matrix4 translateM;
     private Matrix4 invM;
 
-    public Plane(Vec3 _position, Material _material, Vec3 _normal) {
-        super(_position, _material);
+    public Plane(Vec3 _position, Material _material, Vec3 _normal, RayHandling _rh) {
+        super(_position, _material, _rh);
         super.normal = _normal.normalize();
 
         this.translateM = new Matrix4().translate(super.position);

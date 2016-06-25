@@ -2,6 +2,7 @@ package raytracer;
 
 import light.Light;
 import material.Material;
+import material.RayHandling;
 import objects.Shape;
 import raytracer.Ray;
 import utils.RgbColor;
@@ -18,7 +19,7 @@ public class Intersection {
     public float distance;
     public Boolean incoming;
     public Boolean hit;
-    public int shadowCounter;
+    public int level;
 
     public Intersection() {
         interSectionPoint = null;
@@ -29,7 +30,7 @@ public class Intersection {
         distance = -1;
         incoming = false;
         hit = false;
-        shadowCounter = 0;
+        level = 0;
     }
 
 
@@ -50,20 +51,52 @@ public class Intersection {
     public RgbColor getRgbColor() {
         if(!this.hit) return Raytracer.backgroundColor;      // Wenn kein Objekt getroffen wird, wird dieser Wert für den Pixel verwendet --> Hintergrundfarbe der Szene
 
+        this.normal = shape.getNormal(interSectionPoint);
         Light l = Raytracer.lightList.get(0);               // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                        // Position des aktuell betrachteten Lichts
         Vec3 lVector = lPos.sub(interSectionPoint).normalize();            // Vektor von Schnittpunkt zu Lichtquelle
         Vec3 direction = this.inRay.getDirection();
 
         Material m = this.shape.getMaterial();
-        RgbColor rgb = m.getColor(l.getColor(), shape.getNormal(interSectionPoint), lVector, direction);
-        rgb = rgb.add(Raytracer.ambientLight);               // Ambientes Licht addieren, wenn es sich um den Pixel eines getroffenen Objekts handelt
+        RgbColor rgb = m.getColor(l.getColor(), normal, lVector, direction);
 
-        while(shadowCounter!=0)
+        //SCHATTEN
+        for (Light light : Raytracer.lightList) //alle Lichter der Szene durchgehen
         {
-            rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten Farbe abziehen
-            shadowCounter--;
+            Ray shadowRay = new Ray(interSectionPoint, light.getPosition().sub(interSectionPoint), 200); //Strahl von IntersectionPoint zu Licht senden
+            float lightDistance = light.getPosition().sub(interSectionPoint).length(); //Distanz von Licht zu IntersectionPoint
+            for (int i = 0; i < Raytracer.shapeArray.length; i++) // alle Szenenobjekte durchgehen
+            {
+                Shape tempS =Raytracer.shapeArray[i];
+                if (Raytracer.shapeArray[i] != shape) //außer aktuelles Objekt
+                {
+                    Intersection shadowInters = tempS.intersect(shadowRay); //Intersection zwischen Objekt und Licht testen
+                    if (shadowInters.hit) {
+                        if ((shadowInters.distance > 0) && (shadowInters.distance < lightDistance)) //wenn getroffenes Objekt zwischen Licht und Punkt liegt, male Schatten
+                        {
+                            rgb = rgb.sub(Raytracer.shadow);    // Jedes mal, wenn es einen Schatten an dieser Stelle gibt, Wert aus Raytracer abziehen
+                            if (rgb.equals(RgbColor.BLACK)) return rgb;     // Wenn jetzt schon schwarz, sind weitere Berchnungen überflüssig
+                        }
+                    }
+                }
+            }
         }
+
+        //REFLEKTION
+        RayHandling tempRh = shape.getRayHandling();
+
+        Intersection finalIntersection;
+
+        //TODO bekommt man diese Berechnungen auch woanders her?
+        if (tempRh != null && level < Raytracer.reflectionLevel) //falls Reflektion gewünscht wird neuer Strahl geschickt
+        {
+            outRay = tempRh.getOutRay(direction, normal, interSectionPoint);
+            finalIntersection = Raytracer.sendRay(outRay, shape);
+            finalIntersection.level = this.level+1;
+            rgb = rgb.add(finalIntersection.getRgbColor().multScalar(tempRh.dominance));
+        }
+
+        rgb = rgb.add(Raytracer.ambientLight);               // Ambientes Licht addieren
 
         return rgb;
     }
