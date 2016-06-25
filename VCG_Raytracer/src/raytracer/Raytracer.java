@@ -57,8 +57,8 @@ public class Raytracer {
             shapeArray[b+5] = sphere;
 
         }*/
-        Sphere sphere1 = new Sphere (1, new Vec3(2, -2, -5), new Blinn(new RgbColor(1,0,0), 1f, 10));
-        Sphere sphere2 = new Sphere (1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0,0,1), 1f, 10));
+        Sphere sphere1 = new Sphere (1, new Vec3(1, -2, -5), new Blinn(new RgbColor(1,0,0), 1f, 10));
+        Sphere sphere2 = new Sphere (1, new Vec3(-1, -2, -5), new Blinn(new RgbColor(0,0,1), 1f, 10));
         sphere1.setReflection(true);
         sphere2.setReflection(true);
 
@@ -90,28 +90,22 @@ public class Raytracer {
                 Ray r = new Ray(start, dest.sub(start), 200);       // Strahl, der durch den aktuellen Pixel geht
 
                 Intersection inters = sendRay(r, null); //Strahlenberechnung für alle Objekte
+
+                int rekursion = 20; //Anzahl der Rekursionen
+                Ray refRay = r;
                 //REFLEKTION
-                if (inters.shape.getReflection()) //falls Reflektion gewünscht wird neuer Strahl geschickt
+                while (inters.shape.getReflection()) //solange das vom Strahl getroffene Objekt reflektierend ist, berechne neue Reflektion
                 {
-                    Vec3 l = r.getDirection().multScalar(-1);
+                    //berechne Reflektionsstrahl
+                    Vec3 l = refRay.getDirection().multScalar(-1);
                     Vec3 n = inters.shape.getNormal(inters.interSectionPoint);
                     float skalarNI = n.scalar(l)*2;
                     Vec3 zweiSkalarNIN = n.multScalar(skalarNI);
                     Vec3 refDirection = zweiSkalarNIN.sub(l);
-                    Ray refRay = new Ray(inters.interSectionPoint, refDirection, 50);
-                    inters = sendRay(refRay, inters.shape);
-
-                    //ZWEITE REFLEKTION //TODO: In Schleife mit kontrollierbarer Rekursion packen
-                    if (inters.shape.getReflection()) //falls Reflektion gewünscht wird neuer Strahl geschickt
-                    {
-                        Vec3 l2 = refRay.getDirection().multScalar(-1);
-                        Vec3 n2 = inters.shape.getNormal(inters.interSectionPoint);
-                        float skalarNI2 = n2.scalar(l2) * 2;
-                        Vec3 zweiSkalarNIN2 = n2.multScalar(skalarNI2);
-                        Vec3 refDirection2 = zweiSkalarNIN2.sub(l2);
-                        Ray refRay2 = new Ray(inters.interSectionPoint, refDirection2, 50);
-                        inters = sendRay(refRay2, inters.shape);
-                    }
+                    refRay = new Ray(inters.interSectionPoint, refDirection, 50);
+                    inters = sendRay(refRay, inters.shape); //Schnittest mit Reflektionsstrahl
+                    rekursion--;
+                    if (rekursion == 0) break; //wenn Rekursion abgearbeitet beende Schleife
                 }
 
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
