@@ -7,6 +7,7 @@ import material.Blinn;
 import material.Phong;
 //import material.Reflectionold;
 import material.Reflection;
+import material.Refraction;
 import objects.Plane;
 import objects.Shape;
 import objects.Sphere;
@@ -26,7 +27,7 @@ public class Raytracer {
     public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
     public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
     public static Shape[] shapeArray = new Shape[7];
-    public static int reflectionLevel = 0;
+    public static int reflectionLevel = 1;
     public static RgbColor shadow = new RgbColor(0.5f,0.5f,0.5f);
 
     public Raytracer(Window renderWindow) {
@@ -62,14 +63,14 @@ public class Raytracer {
         }*/
 
 
-        Sphere sphere1 = new Sphere(1, new Vec3(2, -2, -5), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Reflection(0.1f));
+        Sphere sphere1 = new Sphere(1, new Vec3(2, -2, -5), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
         Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(0.7f));
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0), null);
         Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
         Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0), null);
-        Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0), null);
-        Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0), null);
+        Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0),  null);
+        Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0),  null);
         //plane2.setReflection(true);
 
         // Shape Array -----------------------------------------------------------------------

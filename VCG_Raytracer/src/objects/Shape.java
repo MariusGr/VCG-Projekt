@@ -35,4 +35,8 @@ public class Shape extends SceneObject {
     }
 
     public RayHandling getRayHandling() {return rayHandling;}
+
+    protected void setRayHandlingShape(Shape s) {
+        if (rayHandling != null) rayHandling.setShape(s);
+    }
 }

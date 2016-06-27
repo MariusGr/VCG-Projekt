@@ -6,6 +6,7 @@ import material.RayHandling;
 import raytracer.Intersection;
 import raytracer.Ray;
 import raytracer.Raytracer;
+import utils.Log;
 import utils.Matrix4;
 import utils.RgbColor;
 import utils.Vec3;
@@ -22,9 +23,9 @@ public class Plane extends Shape {
     public Plane(Vec3 _position, Material _material, Vec3 _normal, RayHandling _rh) {
         super(_position, _material, _rh);
         super.normal = _normal.normalize();
-
         this.translateM = new Matrix4().translate(super.position);
         this.invM = translateM.invert();
+        super.setRayHandlingShape(this);
     }
 
     public Intersection intersect(Ray _ray) {

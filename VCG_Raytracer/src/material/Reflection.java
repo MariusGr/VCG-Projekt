@@ -13,11 +13,11 @@ public class Reflection extends RayHandling{
     }
 
     public Ray getOutRay(Vec3 direction, Vec3 normal, Vec3 startPoint) {
-        //vectorIn ist der einfallende Strahl "ray", hier wird die Richrung des reflektierten Strahls berechnent:
-        Vec3 vectorOut = direction.multScalar(-1);  //-R (R = einfallender Strahl)
-        float skalarNI = normal.scalar(vectorOut) * 2;          //N*(-R)*2
+        //"direction" ist die Richtung des einfallenden Strahls, hier wird die Richtung "refDirection" des reflektierten Strahls berechnent:
+        Vec3 inDirection = direction.negate();  //-R (R = einfallender Strahl der Kamera bzw. refliektierter, ausfallender Lichstrahl)
+        float skalarNI = normal.scalar(inDirection) * 2;          //N*(-R)*2
         Vec3 zweiSkalarNIN = normal.multScalar(skalarNI);    //N*(N*(-R)*2)
-        Vec3 refDirection = zweiSkalarNIN.sub(vectorOut);          //N*(N*(-R)*2)-Rref (Rref = reflektierter, ausfallender Strahl)
-        return new Ray(startPoint, refDirection, 200);  //Reflektionstrahl: Strahl, der vom Trefferpunkt in berechnete Richtung geht
+        Vec3 refDirection = zweiSkalarNIN.sub(inDirection);          //N*(N*(-R)*2)-Rref (Rref = reflektierter, ausfallender Strahl der Kamera bzw. einfallender STrahl des Lichts)
+        return new Ray(startPoint, refDirection, 200);  //Reflektionstrahl: Strahl, der vom Trefferpunkt in berechnete Richtung geht (relektierter Strahl der Kamera)
     }
 }

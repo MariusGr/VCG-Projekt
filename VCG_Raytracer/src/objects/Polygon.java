@@ -10,5 +10,6 @@ import utils.Vec3;
 public class Polygon extends Triangle {
     public Polygon(Vec3 _position, Material _material, RayHandling _rh) {
         super(_position, _material, _rh);
+        super.rayHandling.setShape(this);
     }
 }

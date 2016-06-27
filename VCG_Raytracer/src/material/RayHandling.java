@@ -1,5 +1,6 @@
 package material;
 
+import objects.Shape;
 import raytracer.Ray;
 import utils.Vec3;
 
@@ -15,5 +16,9 @@ public class RayHandling {
 
     public Ray getOutRay(Vec3 direction, Vec3 normal, Vec3 startPoint) {
         return null;
+    }
+
+    public void setShape(Shape _s) {
+        // hier muss nur in Refraktion etwas passieren
     }
 }
