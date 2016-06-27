@@ -17,7 +17,6 @@ public class Sphere extends Shape {
     private float radius;
     private Matrix4 translateM;
     private Matrix4 invM;
-    private float epsilon = Float.MIN_VALUE;
 
     public Sphere(float _radius, Vec3 _pos, Material _material, RayHandling _rh) {
         super(_pos, _material, _rh);
@@ -46,6 +45,7 @@ public class Sphere extends Shape {
 
         if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen******************************
             if ((t1 < t0 && t1 >= 0) || t0 <= epsilon) t0 = t1; // Welches t ist näher an der Kamera?
+            if(t0 <= epsilon) return inters; //t0 und t1 sind beide zu nah am Ausgangspunkt --> Treffer wird ignoriert
 
             Matrix4 translateMStart = new Matrix4().translate(start);
             Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel

@@ -27,7 +27,7 @@ public class Raytracer {
     public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
     public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
     public static Shape[] shapeArray = new Shape[7];
-    public static int reflectionLevel = 1;
+    public static int reflectionLevel = 5;
     public static RgbColor shadow = new RgbColor(0.5f,0.5f,0.5f);
 
     public Raytracer(Window renderWindow) {
@@ -63,8 +63,8 @@ public class Raytracer {
         }*/
 
 
-        Sphere sphere1 = new Sphere(1, new Vec3(2, -2, -5), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
-        Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(0.7f));
+        Sphere sphere1 = new Sphere(1, new Vec3(0, -1, -4), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
+        Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(1f));
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0), null);
         Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
