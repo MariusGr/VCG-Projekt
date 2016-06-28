@@ -22,6 +22,7 @@ public class Sphere extends Shape {
         this.radius = _radius;
         this.translateM = new Matrix4().translate(super.position);
         this.invM = translateM.invert();
+        super.setRayHandlingShape(this);
     }
 
     public Intersection  intersect(Ray _ray) {
@@ -42,7 +43,8 @@ public class Sphere extends Shape {
         float t1 =  ((   -b +(float)  Math.sqrt(d)   )/2f);
 
         if(t0 >= 0 || t1 >= 0) {    //TODO: Performance prüfen******************************
-            if(t1 < t0 && t1 >= 0) t0 = t1; // Welches t ist näher an der Kamera?
+            if ((t1 < t0 && t1 >= 0) || t0 <= epsilon) t0 = t1; // Welches t ist näher an der Kamera?
+            if(t0 <= epsilon) return inters; //t0 und t1 sind beide zu nah am Ausgangspunkt --> Treffer wird ignoriert
 
             Matrix4 translateMStart = new Matrix4().translate(start);
             Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
@@ -55,7 +57,6 @@ public class Sphere extends Shape {
             inters.hit = (d >= 0);
             inters.interSectionPoint = intersectP;
         }
-
         return inters;
     }
 
