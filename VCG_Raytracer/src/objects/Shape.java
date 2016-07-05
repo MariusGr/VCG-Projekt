@@ -1,6 +1,7 @@
 package objects;
 
 import material.Material;
+import material.RayHandling;
 import raytracer.Intersection;
 import raytracer.Ray;
 import utils.Vec3;
@@ -17,7 +18,6 @@ public class Shape extends SceneObject {
     protected RayHandling rayHandling;
     protected float epsilon = 0.0001f;    //Verhindert Schnittpunkte in der Nähe des Strahlanfangs (aufgrund von Ungenauigkeit von floats)
                                             // Alle t-Werte darunter weden ignoriert --> kein Treffer. Bei Fraktalen höher einstellen
->>>>>>> origin/branch_1
 
     public Shape(Vec3 _position, Material _material) {
         super(_position);
