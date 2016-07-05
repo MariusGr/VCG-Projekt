@@ -1,17 +1,16 @@
 package material;
 
 import raytracer.Ray;
+import utils.RgbColor;
 import utils.Vec3;
 
 /**
  * Created by PraktikumCG on 21.06.2016.
  */
-public class Reflection {
-
-
-
-
-
+public class Reflection extends RayHandling{
+    public Reflection(float _d) {
+        super(_d);
+    }
 
     public Ray getOutRay(Vec3 direction, Vec3 normal, Vec3 startPoint) {
         Vec3 inDirection = direction.negate();  //-R (R = einfallender Strahl der Kamera bzw. refliektierter, ausfallender Lichstrahl)

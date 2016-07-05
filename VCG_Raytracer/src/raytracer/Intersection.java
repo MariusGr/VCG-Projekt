@@ -2,6 +2,7 @@ package raytracer;
 
 import light.Light;
 import material.Material;
+import material.RayHandling;
 import objects.Shape;
 import raytracer.Ray;
 import utils.RgbColor;
@@ -18,7 +19,7 @@ public class Intersection {
     public float distance;
     public Boolean incoming;
     public Boolean hit;
-    public int shadowCounter;
+    public int level;
 
     public Intersection() {
         interSectionPoint = null;
@@ -29,7 +30,7 @@ public class Intersection {
         distance = -1;
         incoming = false;
         hit = false;
-        shadowCounter = 0;
+        level = 0;
     }
 
 
@@ -50,6 +51,7 @@ public class Intersection {
     public RgbColor getRgbColor() {
         if(!this.hit) return Raytracer.backgroundColor;      // Wenn kein Objekt getroffen wird, wird dieser Wert für den Pixel verwendet --> Hintergrundfarbe der Szene
 
+        this.normal = shape.getNormal(interSectionPoint);
         Light l = Raytracer.lightList.get(0);               // aktuell betrachtete Lichtquelle
         Vec3 lPos = l.getPosition();                        // Position des aktuell betrachteten Lichts
         Vec3 lVector = lPos.sub(interSectionPoint).normalize();            // Vektor von Schnittpunkt zu Lichtquelle
@@ -57,18 +59,6 @@ public class Intersection {
         RayHandling tempRh = shape.getRayHandling();
         RgbColor rgb = new RgbColor(0,0,0);
 
-<<<<<<< HEAD
-        Material m = this.shape.getMaterial();
-        RgbColor rgb = m.getColor(l.getColor(), shape.getNormal(interSectionPoint), lVector, direction);
-        rgb = rgb.add(Raytracer.ambientLight);               // Ambientes Licht addieren, wenn es sich um den Pixel eines getroffenen Objekts handelt
-
-        while(shadowCounter!=0)
-        {
-            rgb.add(-0.5f,-0.5f,-0.5f);         //Im Schatten Farbe abziehen
-            shadowCounter--;
-        }
-
-=======
         if (tempRh == null || tempRh.dominance < 1f) {  //Farbe berechenen ist unnötig, wenn die Reflektion/Refraktion diese eh 100% überschreibt
             Material m = this.shape.getMaterial();
             rgb = m.getColor(l.getColor(), normal, lVector, direction);
@@ -112,7 +102,6 @@ public class Intersection {
         // AMBIENTES LICHT
         rgb = rgb.add(Raytracer.ambientLight);
 
->>>>>>> origin/branch_1
         return rgb;
     }
 }

@@ -6,11 +6,8 @@ import light.PointLight;
 import material.Blinn;
 import material.Phong;
 //import material.Reflectionold;
-<<<<<<< HEAD
-=======
 import material.Reflection;
 import material.Refraction;
->>>>>>> origin/branch_1
 import objects.Plane;
 import objects.Shape;
 import objects.Sphere;
@@ -30,11 +27,8 @@ public class Raytracer {
     public static RgbColor backgroundColor = new RgbColor(0f, 0f, 0f);
     public static RgbColor ambientLight = new RgbColor(0.1f, 0.1f, 0.1f);
     public static Shape[] shapeArray = new Shape[7];
-<<<<<<< HEAD
-=======
     public static int reflectionLevel = 5;
     public static RgbColor shadow = new RgbColor(0.5f,0.5f,0.5f);
->>>>>>> origin/branch_1
 
     public Raytracer(Window renderWindow) {
         mBufferedImage = renderWindow.getBufferedImage();
@@ -67,29 +61,16 @@ public class Raytracer {
             shapeArray[b+5] = sphere;
 
         }*/
-<<<<<<< HEAD
-        Sphere sphere1 = new Sphere (1, new Vec3(1, -2, -5), new Blinn(new RgbColor(1,0,0), 1f, 10));
-        Sphere sphere2 = new Sphere (1, new Vec3(-1, -2, -5), new Blinn(new RgbColor(0,0,1), 1f, 10));
-        sphere1.setReflection(true);
-        sphere2.setReflection(true);
-
-        Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0));
-        Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1));
-        Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0));
-        Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0));
-        Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0));
-=======
 
 
-        Sphere sphere1 = new Sphere(1, new Vec3(0, -1, -4), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffWater));
-        Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(0.1f));
+        Sphere sphere1 = new Sphere(1, new Vec3(0, -1, -4), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
+        Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(1f));
 
-        Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0),null);
-        Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1),null);
+        Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0), null);
+        Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
         Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0), null);
         Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0),  null);
         Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0),  null);
->>>>>>> origin/branch_1
         //plane2.setReflection(true);
 
         // Shape Array -----------------------------------------------------------------------
@@ -114,22 +95,6 @@ public class Raytracer {
 
                 Intersection inters = sendRay(r, null); //Strahlenberechnung für alle Objekte
 
-                int rekursion = 20; //Anzahl der Rekursionen
-                Ray refRay = r;
-                //REFLEKTION
-                while (inters.shape.getReflection()) //solange das vom Strahl getroffene Objekt reflektierend ist, berechne neue Reflektion
-                {
-                    //berechne Reflektionsstrahl
-                    Vec3 l = refRay.getDirection().multScalar(-1);
-                    Vec3 n = inters.shape.getNormal(inters.interSectionPoint);
-                    float skalarNI = n.scalar(l)*2;
-                    Vec3 zweiSkalarNIN = n.multScalar(skalarNI);
-                    Vec3 refDirection = zweiSkalarNIN.sub(l);
-                    refRay = new Ray(inters.interSectionPoint, refDirection, 50);
-                    inters = sendRay(refRay, inters.shape); //Schnittest mit Reflektionsstrahl
-                    rekursion--;
-                    if (rekursion == 0) break; //wenn Rekursion abgearbeitet beende Schleife
-                }
 
                 mRenderWindow.setPixel(mBufferedImage, inters.getRgbColor(), new Vec2(i, j));     // Pixel entsprechend einfärben (inters.rgb ist backgroundColor, wenn kein Objekt getroffen)
             }
@@ -144,7 +109,7 @@ public class Raytracer {
     }
 
 
-    public Intersection sendRay(Ray ray, Shape s)
+    public static Intersection sendRay(Ray ray, Shape s)
     {
         //DISANZABFRAGE
         // Folgende Werte müssen initialisert werden, indem sie für das erste Objekt im Array geprüft werden
@@ -166,25 +131,6 @@ public class Raytracer {
             }
         }
 
-        //SCHATTEN
-        for (Light light : lightList) //alle Lichter der Szene durchgehen
-        {
-            Ray shadowRay = new Ray(inters.interSectionPoint, light.getPosition().sub(inters.interSectionPoint), 20); //Strahl von IntersectionPoint zu Licht senden
-            float lightDistance = light.getPosition().sub(inters.interSectionPoint).length(); //Distanz von Licht zu IntersectionPoint
-            for (int m = 0; m < shapeArray.length; m++) // alle Szenenobjekte durchgehen
-            {
-                if (shapeArray[m] != inters.shape) //außer aktuelles Objekt
-                {
-                    Intersection shadowInters = shapeArray[m].intersect(shadowRay); //Intersection zwischen Objekt und Licht testen
-                    if (shadowInters.hit) {
-                        if ((shadowInters.distance > 0) && (shadowInters.distance < lightDistance)) //wenn getroffenes Objekt zwischen Licht und Punkt liegt, male Schatten
-                        {
-                            inters.shadowCounter++; //zählen wie viele Objekte im Weg liegen
-                        }
-                    }
-                }
-            }
-        }
         return inters;
     }
 }

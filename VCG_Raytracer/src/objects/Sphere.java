@@ -2,6 +2,7 @@ package objects;
 
 import light.Light;
 import material.Material;
+import material.RayHandling;
 import raytracer.Intersection;
 import raytracer.Ray;
 import raytracer.Raytracer;
@@ -17,8 +18,8 @@ public class Sphere extends Shape {
     private Matrix4 translateM;
     private Matrix4 invM;
 
-    public Sphere(float _radius, Vec3 _pos, Material _material) {
-        super(_pos, _material);
+    public Sphere(float _radius, Vec3 _pos, Material _material, RayHandling _rh) {
+        super(_pos, _material, _rh);
         this.radius = _radius;
         this.translateM = new Matrix4().translate(super.position);
         this.invM = translateM.invert();

@@ -12,23 +12,16 @@ import utils.Vec3;
 public class Shape extends SceneObject {
     protected Material material;
     protected Vec3 normal;
-<<<<<<< HEAD
-    protected boolean reflection;
-=======
     protected RayHandling rayHandling;
     protected float epsilon = 0.0001f;    //Verhindert Schnittpunkte in der Nähe des Strahlanfangs (aufgrund von Ungenauigkeit von floats)
                                             // Alle t-Werte darunter weden ignoriert --> kein Treffer. Bei Fraktalen höher einstellen
 
-    public Shape(Vec3 _position, Material _material) {
+    public Shape(Vec3 _position, Material _material, RayHandling _rayHandling) {
         super(_position);
-        material = _material;
-        normal = null;
-        reflection = false;
+        this.material = _material;
+        this.normal = null;
+        this.rayHandling = _rayHandling;
     }
-
-    public boolean getReflection() {return this.reflection;}
-
-    public void setReflection(boolean b) {reflection = b;}
 
     public Intersection intersect(Ray r)
         {
@@ -42,13 +35,10 @@ public class Shape extends SceneObject {
     public Material getMaterial() {
         return this.material;
     }
-<<<<<<< HEAD
-=======
 
     public RayHandling getRayHandling() {return rayHandling;}
 
     protected void setRayHandlingShape(Shape s) {
         if (rayHandling != null) rayHandling.setShape(s);
     }
->>>>>>> origin/branch_1
 }
