@@ -29,7 +29,7 @@ public class Sphere extends Shape {
     public Intersection  intersect(Ray _ray) {
         Vec3 start = _ray.getStartPoint();
 
-        start = invM.multVec3(start, true);
+        start = invM.multVec3(start, true); //Ray-Start verschieben, dass Kugel im Ursprung liegt
 
         Vec3 dir = _ray.getDirection();                             // Richtung kann dieselbe bleiben
         float b = 2f*(start.x*dir.x+start.y*dir.y+start.z*dir.z);
