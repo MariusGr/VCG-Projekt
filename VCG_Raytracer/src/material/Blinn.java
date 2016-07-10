@@ -33,8 +33,8 @@ public class Blinn extends Material {
         {
             return lRGB;
         }
-        RgbColor pRGB = _iP.multScalar(  (super.materialCoff * (float) Math.pow(_normal.scalar(h), n))  );
+        RgbColor bRGB = _iP.multScalar(  (super.materialCoff * (float) Math.pow(_normal.scalar(h), n))  );
 
-        return   pRGB.add(lRGB);
+        return   bRGB.add(lRGB);
     }
 }

@@ -14,26 +14,35 @@ import utils.Vec3;
  * Created by PraktikumCG on 19.04.2016.
  */
 public class Sphere extends Shape {
-    private float radius;
-    private Matrix4 translateM;
-    private Matrix4 invM;
+    private Matrix4 transform;
+    private Matrix4 transformInv;
+    private Matrix4 scaleM;
+    private Matrix4 scaleInvM;
 
-    public Sphere(float _radius, Vec3 _pos, Material _material, RayHandling _rh) {
+    public Sphere(Vec3 _scaleV, Vec3 _pos, Material _material, RayHandling _rh) {
         super(_pos, _material, _rh);
-        this.radius = _radius;
-        this.translateM = new Matrix4().translate(super.position);
-        this.invM = translateM.invert();
+
+        Vec3 scaleV = _scaleV;
+        transform = new Matrix4();
+        transform = transform.scale(scaleV);
+        transform = transform.translate(super.position);
+        transformInv = transform.invert();
+        scaleM = new Matrix4().scale(scaleV);
+        scaleInvM = scaleM.invert();
+
+
         super.setRayHandlingShape(this);
     }
 
     public Intersection  intersect(Ray _ray) {
         Vec3 start = _ray.getStartPoint();
 
-        start = invM.multVec3(start, true); //Ray-Start verschieben, dass Kugel im Ursprung liegt
+        start = transformInv.multVec3(start, true);
 
         Vec3 dir = _ray.getDirection();                             // Richtung kann dieselbe bleiben
-        float b = 2f*(start.x*dir.x+start.y*dir.y+start.z*dir.z);
-        float c = start.x*start.x+start.y*start.y+start.z*start.z-this.radius*this.radius;
+        Vec3 dirInv = scaleInvM.multVec3(dir, true).normalize();
+        float b = 2f*(start.x*dirInv.x+start.y*dirInv.y+start.z*dirInv.z);
+        float c = start.x*start.x+start.y*start.y+start.z*start.z-1;
 
         Intersection inters = new Intersection();
         float d = b * b - 4f * c;
@@ -47,9 +56,9 @@ public class Sphere extends Shape {
             if ((t1 < t0 && t1 >= 0) || t0 <= epsilon) t0 = t1; // Welches t ist näher an der Kamera?
             if(t0 <= epsilon) return inters; //t0 und t1 sind beide zu nah am Ausgangspunkt --> Treffer wird ignoriert
 
-            Matrix4 translateMStart = new Matrix4().translate(start);
-            Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
-            intersectP = translateM.multVec3(intersectP, true);
+
+            Vec3 intersectP = start.add(dirInv.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
+            intersectP = transform.multVec3(intersectP, true);
 
             // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
             inters.distance = t0;

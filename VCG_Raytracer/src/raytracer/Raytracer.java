@@ -42,10 +42,6 @@ public class Raytracer {
         Camera myCam = new Camera(new Vec3(0, 0, 5), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 90f, new Vec3(0, 0, 0));
         Vec3 start = myCam.getPosition();
 
-        // Shapes Positions -----------------------------------------------------------------------
-        Vec3 sphereStart1 = new Vec3(1, -2, -10);
-        Vec3 sphereStart2 = new Vec3(-1, -2, -8);
-
         // Shapes -----------------------------------------------------------------------
         /*for (int b = 0; b <100; b++)
         {
@@ -56,15 +52,13 @@ public class Raytracer {
             sphereEnd = sphereEnd.sub(sphereStart).multScalar(bF);
             sphereStart = sphereStart.add(sphereEnd).add(hor);
 
-            Sphere sphere = new Sphere(0.1f, sphereStart, new Blinn(new RgbColor(0.9f, 0.6f, 0), 1, 10));
-            sphere.setReflection(true);
-            shapeArray[b+5] = sphere;
-
+            Sphere sphere = new Sphere(0.1f, sphereStart, new Blinn(new RgbColor(0.9f, 0.6f, 0), 1, 10), new Reflection(1f));
+            shapeArray[b+4] = sphere;
         }*/
 
 
-        Sphere sphere1 = new Sphere(1, new Vec3(0, -1, -4), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
-        Sphere sphere2 = new Sphere(1, new Vec3(-2, -2, -7), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(1f));
+        Sphere sphere1 = new Sphere(new Vec3(2f, 1.0f, 2.0f), new Vec3(1, -2, -7), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
+        Sphere sphere2 = new Sphere(new Vec3(2f, 1.0f, 2.0f), new Vec3(-1.5f, -2, -9), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(0.2f));
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0), null);
         Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
@@ -85,7 +79,9 @@ public class Raytracer {
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(0f, 2.8f, -6f));
+        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(1f, 2.8f, -6f));
+        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(-1f, 2.8f, -6f));
+
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j++) {
