@@ -59,6 +59,7 @@ public class Intersection {
         RayHandling tempRh = shape.getRayHandling();
         RgbColor rgb = new RgbColor(0,0,0);
 
+        //MATERIAL OHNE REFLETKION REFRAKTION
         if (tempRh == null || tempRh.dominance < 1f) {  //Farbe berechenen ist unnötig, wenn die Reflektion/Refraktion diese eh 100% überschreibt
             Material m = this.shape.getMaterial();
             rgb = m.getColor(l.getColor(), normal, lVector, direction);

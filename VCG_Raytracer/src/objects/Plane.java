@@ -57,7 +57,6 @@ public class Plane extends Shape {
         else {
             float t0 = -(f1 / f2);
 
-            Matrix4 translateMStart = new Matrix4().translate(start);
             Vec3 intersectP = start.add(dir.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Plane
             intersectP = translateM.multVec3(intersectP, true);
 

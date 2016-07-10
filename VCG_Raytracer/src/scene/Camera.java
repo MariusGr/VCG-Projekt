@@ -35,11 +35,6 @@ public class Camera extends SceneObject {
         //this.vVector = lookAt.multScalar(focalLength);       // Skalarprodukt aus lookAt und Länge von v ergibt ViewVector, damit sind view und up Vector gegeben
     }
 
-    public void getPixelColor(Vec2 _p) {
-        Vec2 pN = pNorm(_p);
-
-        //Vec3
-    }
 
     private Vec3 viewPlaneCenter() {
         return super.position.add(vVector.multScalar(focalLength));
@@ -50,9 +45,6 @@ public class Camera extends SceneObject {
         Vec3 horizontal = sVector.multScalar(pN.x*viewPlaneW);
         Vec3 vertical = uVector.multScalar(-pN.y*viewPlaneH);
 
-        float xN = pN.x;
-        float yN = -pN.y; // *-1, wegen umgedrehten Koordinatensystem auf Bildschirm
-        Vec3 vC = viewPlaneCenter();
 
         //Vec3 dest = new Vec3(vC.x+(xN*viewPlaneW/2), vC.y+(yN*viewPlaneH/2), vC.z);
         Vec3 dest = viewPlaneCenter().add(horizontal.add(vertical));
@@ -88,7 +80,4 @@ public class Camera extends SceneObject {
         return super.position;
     }
 
-    public float getFocalLength() {
-        return this.focalLength;
-    }
 }

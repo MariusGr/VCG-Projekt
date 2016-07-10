@@ -30,6 +30,7 @@ public class Phong extends Material {
         }
         RgbColor pRGB = _iP.multScalar(  (super.materialCoff * (float) Math.pow(_dir.scalar(reflectionV), n))  );
 
-        return   pRGB.add(lRGB);
+        RgbColor rgbcolor =  pRGB.add(lRGB);
+        return   rgbcolor;
     }
 }

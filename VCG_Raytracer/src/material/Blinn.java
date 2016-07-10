@@ -24,7 +24,7 @@ public class Blinn extends Material {
 
         RgbColor lRGB = lam.getColor(_iP, _normal, _lightV);
         float alpha = (float) _normal.angle(_lightV);
-        float beta = (float) _normal.angle(h);
+        float beta = (float) _dir.angle(h);
 
 
 
@@ -35,6 +35,7 @@ public class Blinn extends Material {
         }
         RgbColor bRGB = _iP.multScalar(  (super.materialCoff * (float) Math.pow(_normal.scalar(h), n))  );
 
-        return   bRGB.add(lRGB);
+        RgbColor rgbcolor =  bRGB.add(lRGB);
+        return  rgbcolor;
     }
 }
