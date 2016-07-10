@@ -57,15 +57,14 @@ public class Raytracer {
         }*/
 
 
-        Sphere sphere1 = new Sphere(new Vec3(1.0f, 1.0f, 1.0f), new Vec3(1, -2, -7), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
-        Sphere sphere2 = new Sphere(new Vec3(1.0f, 1.0f, 1.0f), new Vec3(-1.5f, -2, -9), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(1f));
+        Sphere sphere1 = new Sphere(new Vec3(1.0f, 1.0f, 1.0f), new Vec3(1, -2, -8), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Refraction(1f, Refraction.mCoffGlass));
+        Sphere sphere2 = new Sphere(new Vec3(1.0f, 1.0f, 1.0f), new Vec3(-1.5f, -2, -11), new Blinn(new RgbColor(0, 0, 1), 1f, 10), new Reflection(1f));
 
         Plane plane1 = new Plane(new Vec3(0, -3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 1, 0), null);
-        Plane plane2 = new Plane(new Vec3(0, 0, -12f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
+        Plane plane2 = new Plane(new Vec3(0, 0, -14f), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, 0, 1), null);
         Plane plane3 = new Plane(new Vec3(0, 3f, 0), new Blinn(new RgbColor(1, 1, 1), 1f, 10), new Vec3(0, -1, 0), null);
         Plane plane4 = new Plane(new Vec3(3f, 0, 0), new Blinn(new RgbColor(0, 1, 0), 1f, 10), new Vec3(-1, 0, 0),  null);
         Plane plane5 = new Plane(new Vec3(-3f, 0, 0), new Blinn(new RgbColor(1, 0, 0), 1f, 10), new Vec3(1, 0, 0),  null);
-        //plane2.setReflection(true);
 
         // Shape Array -----------------------------------------------------------------------
         // ACHTUNG: Darf niemals leer sein, wegen Treffererkennungs-Initialisierung! (s. unten)
@@ -79,9 +78,7 @@ public class Raytracer {
 
         // Lights -----------------------------------------------------------------------
 
-        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(1f, 2.8f, -6f));
-        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(-1f, 2.8f, -6f));
-
+        createLight(0, new RgbColor(0.8f, 0.8f, 0.8f), new Vec3(0f, 2.8f, -8f));
 
         // Alle Pixel druchlaufen...
         for (int j = 0; j < mBufferedImage.getHeight(); j++) {
