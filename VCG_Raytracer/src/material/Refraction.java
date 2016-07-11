@@ -27,41 +27,26 @@ public class Refraction extends Reflection{
 
     public Ray getOutRay(Vec3 direction, Vec3 normal, Vec3 startPoint) {
         Vec3 outRayStart = startPoint;
-        Vec3 outDirection = breakRayDirection(direction, normal, materialCoefficient, outRayStart);
+        Vec3 outDirection = breakRayDirection(direction, normal, materialCoefficient);
         Ray tempRay = new Ray(startPoint, outDirection, 200);  //Reflektionstrahl: Strahl, der gebrochen durchs Innere der Kuegel geht
         Intersection tempInters = shape.intersect(tempRay); // Schnitttest mit Objelt, durch den er verläuft. Liegt ein Teil eines anderen Objektes darin, wird dieser ignoriert /TODO: Wenn wichtig, hier auch im refraktierenden Objekt befindliche Objekte berücksichtigen
 
         if (tempInters.hit) {
             outRayStart = tempInters.interSectionPoint;
             tempInters.normal = shape.getNormal(outRayStart);
-            outDirection = breakRayDirection(outDirection, tempInters.normal.negate(), getMaterialCoefficientInverse, outRayStart);
+            outDirection = breakRayDirection(outDirection, tempInters.normal.negate(), getMaterialCoefficientInverse);
         }
 
         return new Ray(outRayStart, outDirection, 200);  //Reflektionstrahl: Strahl, der vom Trefferpunkt in berechnete Richtung geht
     }
 
-    private  Vec3 breakRayDirection(Vec3 direction, Vec3 normal, float _coff, Vec3 _outRayStart) {
+    private  Vec3 breakRayDirection(Vec3 direction, Vec3 normal, float _coff) {
         Vec3 inDirection = direction.negate();  //-R (R = einfallender Strahl)
         float nVScalar = normal.scalar(inDirection);
         float sqrt = 1-_coff*_coff*(1-nVScalar*nVScalar);
-        Vec3 outDirection = null;
-
-        // Folgender Teil ist für totale interne Reflektion von Bedeutung. Diese funktioniert jedoch nicht richtig
-        /*if (sqrt < 0) {
-            Vec3 reflDir = super.breakRayDirection(inDirection, normal);        //intern reflektierte Richtung
-            Ray reflRay = new Ray(_outRayStart, reflDir, 200);
-            Intersection tempInters = shape.intersect(reflRay);
-
-            if (tempInters.hit) {
-                Vec3 outRayStart = tempInters.interSectionPoint;
-                tempInters.normal = shape.getNormal(outRayStart);
-                outDirection = breakRayDirection(reflDir, tempInters.normal.negate(), getMaterialCoefficientInverse, outRayStart);
-                return outDirection;
-            }
-        }*/
 
         float tempF = nVScalar * _coff - (float) Math.sqrt(sqrt);
-        outDirection = normal.multScalar(tempF).sub(inDirection.multScalar(_coff));
+        Vec3 outDirection = normal.multScalar(tempF).sub(inDirection.multScalar(_coff));
 
         return outDirection;
     }

@@ -8,6 +8,7 @@ import utils.Vec3;
  */
 public class Phong extends Material {
     private float n;
+    private static float maxAngle = (float) Math.toRadians(90);
 
     public Phong(RgbColor _color, float _materialCoff, float _n) {
         super(_color, _materialCoff);
@@ -24,7 +25,7 @@ public class Phong extends Material {
         reflectionV = reflectionV.sub(_lightV);
         float alpha = (float) _dir.angle(reflectionV);
         float beta = (float) _lightV.angle(_normal);
-        if (beta > Math.PI/2 || alpha > Math.PI/2)
+        if (beta > maxAngle || alpha > maxAngle)
         {
             return lRGB;
         }

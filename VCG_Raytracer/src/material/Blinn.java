@@ -1,5 +1,6 @@
 package material;
 
+import utils.Log;
 import utils.RgbColor;
 import utils.Vec3;
 
@@ -9,6 +10,7 @@ import utils.Vec3;
 public class Blinn extends Material {
 
     private float n;
+    private static float maxAngle = (float) Math.toRadians(90);
 
     public Blinn (RgbColor _color, float _materialCoff, float _n) {
         super(_color, _materialCoff);
@@ -26,10 +28,7 @@ public class Blinn extends Material {
         float alpha = (float) _normal.angle(_lightV);
         float beta = (float) _dir.angle(h);
 
-
-
-
-        if (beta > Math.PI/2 || alpha > Math.PI/2)
+        if (beta > maxAngle || alpha > maxAngle)
         {
             return lRGB;
         }

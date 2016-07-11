@@ -18,6 +18,8 @@ public class Sphere extends Shape {
     private Matrix4 transformInv;
     private Matrix4 scaleM;
     private Matrix4 scaleInvM;
+    private Matrix4 transformInvTranspose;
+    private Matrix4 scaleTransM;
 
     public Sphere(Vec3 _scaleV, Vec3 _pos, Material _material, RayHandling _rh) {
         super(_pos, _material, _rh);
@@ -29,15 +31,16 @@ public class Sphere extends Shape {
         transformInv = transform.invert();
         scaleM = new Matrix4().scale(scaleV);
         scaleInvM = scaleM.invert();
-
+        scaleTransM = scaleInvM.transpose();
+        transformInvTranspose = transformInv.transpose();
 
         super.setRayHandlingShape(this);
     }
 
     public Intersection  intersect(Ray _ray) {
-        Vec3 start = _ray.getStartPoint();
+        Vec3 startOrigin = _ray.getStartPoint();
 
-        start = transformInv.multVec3(start, true);
+        Vec3 start = transformInv.multVec3(startOrigin, true);
 
         Vec3 dir = _ray.getDirection();                             // Richtung kann dieselbe bleiben
         Vec3 dirInv = scaleInvM.multVec3(dir, true).normalize();
@@ -60,18 +63,21 @@ public class Sphere extends Shape {
             Vec3 intersectP = start.add(dirInv.multScalar(t0));           // Schnittpunkt von gesendeten Strahl mit der Kugel
             intersectP = transform.multVec3(intersectP, true);
 
+            float distance = startOrigin.sub(intersectP).length();
+
             // Ausrechung der Farbwerte erfolgt erst in Intersection, wenn durch die Raytracer Punkt zeichnet
-            inters.distance = t0;
+            inters.distance = distance;
             inters.shape = this;
             inters.inRay = _ray;
-            inters.hit = (d >= 0);
+            inters.hit = true;
             inters.interSectionPoint = intersectP;
         }
         return inters;
     }
 
     public Vec3 getNormal(Vec3 pointOnSurface) {
-        Vec3 normal = pointOnSurface.sub(super.position).normalize();   // Normale geht vom Ursprung der Kugel durch den Punkt auf ihrer Oberfläche
+        Vec3 normal = transformInv.multVec3(pointOnSurface, true);
+        normal = transformInvTranspose.multVec3(normal, true).normalize();
         return normal;
     }
 }
